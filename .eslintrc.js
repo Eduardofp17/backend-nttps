@@ -19,5 +19,6 @@ module.exports = {
     "no-param-reassign": 0,
     "no-empty-function": 0,
     "camelcase": 0,
+    "import/prefer-default-export": 0,
   },
 };

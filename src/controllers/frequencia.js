@@ -21,15 +21,16 @@ class FrequenciaController {
 
       req.body.updated_by = updated_by;
       req.body.Date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-      console.log(req.body.Date);
+      req.body.Hour = `${new Date().getHours()}:${new Date().getMinutes()}`;
       const frequenciaAtt = await sala.update(req.body);
-      return res.json(frequenciaAtt);
+      return res.json({ frequenciaAtt });
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
       });
     }
   }
+
   // async create(req, res) {
   //   try {
   //     const newFrequencia = await Frequencia.create(req.body);

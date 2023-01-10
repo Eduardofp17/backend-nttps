@@ -33,6 +33,10 @@ export default class Frequencia extends Model {
         allowNull: false,
         defaultValue: `${new Date().getFullYear}-${new Date().getMonth()}-${new Date().getDay()}`,
       },
+      Hour: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     }, { sequelize });
     return this;
   }

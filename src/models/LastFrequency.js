@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 
-export default class LastFrequency extends Model {
+export default class FrequenciasHistoric extends Model {
   static init(sequelize) {
     super.init({
       sala: {
@@ -12,8 +12,16 @@ export default class LastFrequency extends Model {
       lunch: {
         type: Sequelize.INTEGER,
       },
-      afternonsnack: {
+      afternoonsnack: {
         type: Sequelize.INTEGER,
+      },
+      Date: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+      },
+      Hour: {
+        type: Sequelize.STRING,
+        defaultValue: '',
       },
     }, { sequelize });
     return this;
