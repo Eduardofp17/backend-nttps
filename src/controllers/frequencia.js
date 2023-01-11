@@ -1,4 +1,5 @@
 import Frequencia from "../models/Frequencia";
+import LastFrequencyController from "./lastFrequency";
 
 class FrequenciaController {
   async index(req, res) {
@@ -23,6 +24,7 @@ class FrequenciaController {
       req.body.Date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
       req.body.Hour = `${new Date().getHours()}:${new Date().getMinutes()}`;
       const frequenciaAtt = await sala.update(req.body);
+      await LastFrequencyController.create();
       return res.json({ frequenciaAtt });
     } catch (e) {
       return res.status(400).json({

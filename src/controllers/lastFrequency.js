@@ -4,9 +4,9 @@ import FrequenciasHistoric from "../models/LastFrequency";
 class LastFrequencyController {
   async index(req, res) {
     try {
-      const dateNow = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-      const frequencias = await Frequencia.findAll({ where: { Date: dateNow } });
-      return res.json(frequencias);
+      const frequencias = await FrequenciasHistoric.findAll();
+
+      return frequencias;
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
@@ -14,35 +14,57 @@ class LastFrequencyController {
     }
   }
 
-  async create(req, res) {
+  async create() {
     const dateNow = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
     const frequencias = await Frequencia.findAll({ where: { Date: dateNow } });
-
-    const frequenciasToday = [];
     frequencias.map(async (frequencia) => {
       if (frequencia.Hour >= '07:00' && frequencia.Hour <= '08:50') {
-        return frequenciasToday.push({
-          sala: frequencia.sala,
-          morning: true,
-          hour: frequencia.Hour,
-        });
-      }
-      if (frequencia.Hour >= '09:10' && frequencia.Hour <= '11:30') {
-        return frequenciasToday.push({
-          sala: frequencia.sala,
-          lunch: true,
-          hour: frequencia.Hour,
-        });
-      }
-      if (frequencia.Hour >= '13:00' && frequencia.Hour <= '14:40') {
-        const exist = await FrequenciasHistoric.findOne({
+        const frequenciaHistoric = await FrequenciasHistoric.findOne({
           where: {
             sala: frequencia.sala,
             Date: frequencia.Date,
           },
         });
-        if (exist) return 1;
-        console.log(exist);
+        const body = {
+          sala: frequencia.sala,
+          breakfast: frequencia.qtdPresentes,
+          updated_by: frequencia.updated_by,
+          Date: frequencia.Date,
+          Hour: frequencia.Hour,
+        };
+        if (frequenciaHistoric) {
+          await frequenciaHistoric.update(body);
+          return 1;
+        }
+        await FrequenciasHistoric.create(body);
+      }
+      if (frequencia.Hour >= '09:10' && frequencia.Hour <= '11:30') {
+        const frequenciaHistoric = await FrequenciasHistoric.findOne({
+          where: {
+            sala: frequencia.sala,
+            Date: frequencia.Date,
+          },
+        });
+        const body = {
+          sala: frequencia.sala,
+          lunch: frequencia.qtdPresentes,
+          updated_by: frequencia.updated_by,
+          Date: frequencia.Date,
+          Hour: frequencia.Hour,
+        };
+        if (frequenciaHistoric) {
+          await frequenciaHistoric.update(body);
+          return 1;
+        }
+        await FrequenciasHistoric.create(body);
+      }
+      if (frequencia.Hour >= '13:00' && frequencia.Hour <= '14:40') {
+        const frequenciaHistoric = await FrequenciasHistoric.findOne({
+          where: {
+            sala: frequencia.sala,
+            Date: frequencia.Date,
+          },
+        });
         const body = {
           sala: frequencia.sala,
           afternoonsnack: frequencia.qtdPresentes,
@@ -50,15 +72,15 @@ class LastFrequencyController {
           Date: frequencia.Date,
           Hour: frequencia.Hour,
         };
+        if (frequenciaHistoric) {
+          await frequenciaHistoric.update(body);
+          return 1;
+        }
         await FrequenciasHistoric.create(body);
       }
-      return frequenciasToday.push({
-        sala: frequencia.sala,
-        msg: "Is not a valid turn",
-        hour: frequencia.Hour,
-      });
+      return 1;
     });
-    return res.json({ frequenciasToday });
+    return 0;
   }
 }
 

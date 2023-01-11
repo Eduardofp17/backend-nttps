@@ -8,6 +8,5 @@ const router = new Router();
 router.get("/", loginRequired, FrequenciaController.index);
 router.put("/", loginRequired, FrequenciaController.update);
 router.get("/history", loginRequired, lastFrequency.index);
-router.post("/history", loginRequired, lastFrequency.create);
 // router.post("/", FrequenciaController.create);
 export default router;

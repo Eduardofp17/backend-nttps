@@ -15,6 +15,9 @@ export default class FrequenciasHistoric extends Model {
       afternoonsnack: {
         type: Sequelize.INTEGER,
       },
+      updated_by: {
+        type: Sequelize.STRING,
+      },
       Date: {
         type: Sequelize.STRING,
         defaultValue: '',
