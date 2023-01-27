@@ -22,6 +22,7 @@ export default async (req, res, next) => {
       Nome: user.nome,
       Sobrenome: user.sobrenome,
       Level: user.level,
+      School_id: user.school_id,
     };
     return next();
   } catch (e) { console.log(e); return res.status(401).json({ errors: ['Permissão inválida'] }); }

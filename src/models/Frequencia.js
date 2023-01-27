@@ -31,13 +31,18 @@ export default class Frequencia extends Model {
       Date: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: `${new Date().getFullYear}-${new Date().getMonth()}-${new Date().getDay()}`,
+        defaultValue: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`,
       },
       Hour: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: `${new Date().getHours()}:${new Date().getMinutes()}`,
       },
     }, { sequelize });
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.SchoolModel, { foreignKey: 'school_id' });
   }
 }

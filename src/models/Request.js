@@ -1,7 +1,7 @@
 import Sequelize, { Model } from 'sequelize';
 import bcryptjs from 'bcryptjs';
 
-export default class User extends Model {
+export default class RequestsModel extends Model {
   static init(sequelize) {
     super.init({
       nome: {
@@ -36,10 +36,6 @@ export default class User extends Model {
           },
         },
       },
-      level: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-      },
       school_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -47,6 +43,16 @@ export default class User extends Model {
         validate: {
           notEmpty: {
             msg: "A user must be associated with a school",
+          },
+        },
+      },
+      status: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: "Internal error. Plese send the status",
           },
         },
       },
@@ -64,7 +70,7 @@ export default class User extends Model {
           },
         },
       },
-    }, { sequelize });
+    }, { sequelize, tableName: 'Requests' });
     this.addHook('beforeSave', async (user) => {
       if (user.password) {
         user.password_hash = await bcryptjs.hash(user.password, 8);

@@ -20,5 +20,7 @@ module.exports = {
     "no-empty-function": 0,
     "camelcase": 0,
     "import/prefer-default-export": 0,
+    "no-plusplus": 0,
+    "no-unused-vars": 0,
   },
 };
