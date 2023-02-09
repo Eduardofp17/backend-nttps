@@ -54,22 +54,7 @@ export default class User extends Model {
         type: Sequelize.STRING,
         defaultValue: '',
       },
-      password: {
-        type: Sequelize.VIRTUAL,
-        defaultValue: '',
-        validate: {
-          len: {
-            args: [6, 26],
-            msg: "Sua senha deve conter de 6 à 26 caracteres",
-          },
-        },
-      },
-    }, { sequelize });
-    this.addHook('beforeSave', async (user) => {
-      if (user.password) {
-        user.password_hash = await bcryptjs.hash(user.password, 8);
-      }
-    });
+    }, { sequelize, tableName: 'users' });
     return this;
   }
 

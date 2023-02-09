@@ -2,6 +2,7 @@ require('dotenv').config();
 
 import './database';
 // Routes
+import cors from 'cors';
 import homeRoutes from './routes/home';
 import cardapioRoutes from './routes/cardapio';
 import userRoutes from './routes/user';
@@ -12,6 +13,17 @@ import requestsRoutes from './routes/request';
 
 const express = require('express');
 
+const whitelist = ['https://receitaws.com.br/'];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS me'));
+    }
+  },
+};
 class App {
   constructor() {
     this.app = express();
@@ -20,6 +32,7 @@ class App {
   }
 
   middlewares() {
+    this.app.use(cors(corsOptions));
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
   }

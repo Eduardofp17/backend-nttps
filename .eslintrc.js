@@ -22,5 +22,7 @@ module.exports = {
     "import/prefer-default-export": 0,
     "no-plusplus": 0,
     "no-unused-vars": 0,
+    "import/extensions": 0,
+    "consistent-return": 0,
   },
 };

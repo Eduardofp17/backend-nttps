@@ -1,7 +1,13 @@
-import app from './app';
+import app from "./app";
 
+const processPID = process.pid;
 const port = process.env.APP_PORT;
 
-app.listen(port, () => {
-  console.log('Estou rodando na porta', port);
+const server = app.listen(port, () => {
+  console.log("I'm running at: ", port);
+  console.log("processPID", processPID);
+});
+process.on("SIGTERM", () => {
+  console.log("Server ending", new Date().toISOString());
+  server.close(() => process.exit());
 });

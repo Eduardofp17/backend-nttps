@@ -1,6 +1,10 @@
+import jwt from 'jsonwebtoken';
 import RequestsModel from "../models/Request";
 import SchoolModel from "../models/School";
 import User from "../models/User";
+import Token from "../utils/jwtEmail";
+import sendEmail from "../utils/sendEmail";
+import AcceptUser from '../models/UserAccept';
 
 class RequestsController {
   async index(req, res) {
@@ -17,24 +21,99 @@ class RequestsController {
   async create(req, res) {
     try {
       if (!req.body.code) return res.status(400).json("Please fill the field with an code");
+
       const school = await SchoolModel.findOne({ where: { code: req.body.code } });
       if (!school) return res.status(400).json("School don't exist");
+
+      if (school.accepting_acounts < 1) return res.status(422).json("School is not accepting new accounts");
       const hasRequest = await RequestsModel.findOne({ where: { email: req.body.email } });
       if (hasRequest) return res.status(400).json("Request already exist");
 
-      console.log(req.body.email);
       const userExist = await User.findOne({ where: { email: req.body.email } });
       if (userExist) return res.status(400).json("User already exist");
       req.body.school_id = school.id;
       req.body.status = "Pending";
       const request = await RequestsModel.create(req.body);
-
+      if (!request) return res.status(500).json("An error ocurred");
+      const token = await Token.create(request.id, request.email);
+      const link = `${process.env.APP_URL}:${process.env.APP_PORT}/requests/confirm/${token}`;
+      await sendEmail(request.email, "email Verification", link);
       return res.status(200).json("Request sent successfully");
     } catch (e) {
-      console.log(e);
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
       });
+    }
+  }
+
+  async confirmEmail(req, res) {
+    try {
+      const dados = jwt.verify(req.params.id, process.env.TOKEN_SECRET);
+      const {
+        id, email,
+      } = dados;
+      const request = await RequestsModel.findByPk(id);
+      if (!request) return res.status(400).json("Request doesn't exist");
+      await request.update({ verified: true });
+      return res.status(200).json("Email verified");
+    } catch (e) {
+      return res.status(500).json("Internal server error");
+    }
+  }
+
+  async acceptRequest(req, res) {
+    try {
+      const request = await RequestsModel.findOne({ where: { email: req.body.email } });
+      if (!request) return res.status(400).json("Request doesn't exist");
+      if (request.status !== 'Pending') return res.status(500).json("Internal server error");
+      if (request.verified !== true) return res.status(422).json("The user have to confirm your email");
+      req.status = "Allowed";
+      if (req.user.Level < 3) return res.status(401).json("Unauthorized");
+      const newUser = await AcceptUser.create({
+        nome: request.nome,
+        sobrenome: request.sobrenome,
+        email: request.email,
+        password_hash: request.password_hash,
+        school_id: request.school_id,
+      });
+      if (!newUser) return res.status(500).json("An error ocurred");
+      await request.destroy();
+      const school = await SchoolModel.findByPk(newUser.school_id);
+      if (!school) return res.status(422).json("School doesn't exist");
+      const link = `${process.env.APP_URL}:${process.env.APP_PORT}/users/login/`;
+      const button = `<a href='${link}' style="font-family: inherit;
+      font-weight: 500;
+      font-size: 17px;
+      padding: 0.8em 1.5em 0.8em 1.2em;
+      color: white;
+     background: #185E2C;
+      border: none;
+      box-shadow: 0 0.7em 1.5em -0.5em #000;
+      letter-spacing: 0.05em;
+      border-radius: 20em; text-decoration: none;">Faça login aqui</a>`;
+      const text = `Olá ${newUser.nome} seu pedido para fazer parte da instituição ${school.name} foi aceito com sucesso.  Faça login clicando aqui: <br> <br> ${button} `;
+      await sendEmail(req.body.email, "Registro em nossa plataforma", text);
+      return res.status(200).json("Created account");
+    } catch (e) {
+      return res.status(500).json("Internal server error");
+    }
+  }
+
+  async rejectRequest(req, res) {
+    try {
+      const request = await RequestsModel.findOne({ where: { email: req.body.email } });
+      if (!request) return res.status(400).json("Request doesn't exist");
+      if (request.status !== 'Pending') return res.status(500).json("Internal server error");
+      req.status = "Rejected";
+      if (req.user.Level < 3) return res.status(401).json("Unauthorized");
+      await request.destroy();
+      const school = await SchoolModel.findByPk(request.school_id);
+      if (!school) return res.status(422).json("School doesn't exist");
+      const text = `Olá, ${request.nome}. Seu pedido para fazer parte da instituição ${school.name} foi rejeitado.`;
+      await sendEmail(req.body.email, "Adesão de conta", text);
+      return res.status(200).json("Rejected request");
+    } catch (e) {
+      return res.status(500).json("Internal server error");
     }
   }
 }

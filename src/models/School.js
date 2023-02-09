@@ -53,6 +53,16 @@ export default class SchoolModel extends Model {
           },
         },
       },
+      accepting_acounts: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
+      verified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: 0,
+      },
     }, { sequelize, tableName: 'Schools' });
   }
 

@@ -7,4 +7,5 @@ const router = new Router();
 router.get("/", school.index);
 router.post("/", school.create);
 router.put("/", loginRequired, school.update);
+router.get("/confirm/:id", school.confirmEmail);
 export default router;

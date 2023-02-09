@@ -70,6 +70,11 @@ export default class RequestsModel extends Model {
           },
         },
       },
+      verified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: 0,
+      },
     }, { sequelize, tableName: 'Requests' });
     this.addHook('beforeSave', async (user) => {
       if (user.password) {

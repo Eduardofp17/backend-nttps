@@ -3,7 +3,9 @@ import FrequenciasHistoric from "../models/LastFrequency";
 class LastFrequencyController {
   async index(req, res) {
     try {
-      const frequencias = await FrequenciasHistoric.findAll();
+      const frequencias = await FrequenciasHistoric.findAll(
+        { where: { school_id: req.user.School_id } },
+      );
       return res.json(frequencias);
     } catch (e) {
       return res.status(400).json({
@@ -20,6 +22,7 @@ class LastFrequencyController {
         updated_by: frequencia.updated_by,
         Date: frequencia.Date,
         Hour: frequencia.Hour,
+        school_id: frequencia.school_id,
       };
       await FrequenciasHistoric.create(body);
     }
@@ -30,6 +33,7 @@ class LastFrequencyController {
         updated_by: frequencia.updated_by,
         Date: frequencia.Date,
         Hour: frequencia.Hour,
+        school_id: frequencia.school_id,
       };
       await FrequenciasHistoric.create(body);
     }
@@ -40,6 +44,7 @@ class LastFrequencyController {
         updated_by: frequencia.updated_by,
         Date: frequencia.Date,
         Hour: frequencia.Hour,
+        school_id: frequencia.school_id,
       };
       await FrequenciasHistoric.create(body);
     }
@@ -51,6 +56,7 @@ class LastFrequencyController {
       where: {
         sala: frequencia.sala,
         Date: frequencia.Date,
+        school_id: frequencia.school_id,
       },
     });
     if (frequencia.Hour >= '07:00' && frequencia.Hour <= '08:50') {
@@ -60,6 +66,7 @@ class LastFrequencyController {
         updated_by: frequencia.updated_by,
         Date: frequencia.Date,
         Hour: frequencia.Hour,
+        school_id: frequencia.school_id,
       };
       await frequenciasHistoric.update(body);
     }
@@ -70,6 +77,7 @@ class LastFrequencyController {
         updated_by: frequencia.updated_by,
         Date: frequencia.Date,
         Hour: frequencia.Hour,
+        school_id: frequencia.school_id,
       };
       await frequenciasHistoric.update(body);
     }
@@ -80,6 +88,7 @@ class LastFrequencyController {
         updated_by: frequencia.updated_by,
         Date: frequencia.Date,
         Hour: frequencia.Hour,
+        school_id: frequencia.school_id,
       };
       await frequenciasHistoric.update(body);
     }

@@ -26,7 +26,16 @@ export default class FrequenciasHistoric extends Model {
         type: Sequelize.STRING,
         defaultValue: '',
       },
+      school_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: ' ',
+      },
     }, { sequelize });
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.SchoolModel, { foreignKey: 'school_id' });
   }
 }

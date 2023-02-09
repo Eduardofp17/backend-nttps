@@ -16,14 +16,7 @@ export default async (req, res, next) => {
     const user = await User.findOne({ where: { id, email } });
     if (!user) return res.status(401).json({ errors: ['Faça login novamente'] });
 
-    req.user = {
-      Id: user.id,
-      Email: user.email,
-      Nome: user.nome,
-      Sobrenome: user.sobrenome,
-      Level: user.level,
-      School_id: user.school_id,
-    };
+    if (user.level < 2) return res.status(401).json("Invalid permission");
     return next();
   } catch (e) { return res.status(401).json({ errors: ['Permissão inválida'] }); }
 };
