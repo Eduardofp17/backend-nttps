@@ -9,7 +9,7 @@ import AcceptUser from '../models/UserAccept';
 class RequestsController {
   async index(req, res) {
     try {
-      const requests = await RequestsModel.findAll({ where: { school_id: req.user.School_id } });
+      const requests = await RequestsModel.findAll({ where: { school_id: req.user.School_id } }, { attributes: ['id'] });
       return res.status(200).json(requests);
     } catch (e) {
       return res.status(400).json({

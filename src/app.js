@@ -3,6 +3,8 @@ require('dotenv').config();
 import './database';
 // Routes
 import cors from 'cors';
+import compression from 'compression';
+import helmet from 'helmet';
 import homeRoutes from './routes/home';
 import cardapioRoutes from './routes/cardapio';
 import userRoutes from './routes/user';
@@ -32,7 +34,9 @@ class App {
   }
 
   middlewares() {
+    this.app.use(helmet());
     this.app.use(cors(corsOptions));
+    this.app.use(compression());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
   }

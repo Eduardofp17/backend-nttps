@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import SchoolModel from '../models/School';
 
 export default async (req, res, next) => {
   const { authorization } = req.headers;
@@ -14,16 +15,30 @@ export default async (req, res, next) => {
     } = dados;
 
     const user = await User.findOne({ where: { id, email } });
-    if (!user) return res.status(401).json({ errors: ['Faça login novamente'] });
+    let schoolUser;
+    if (!user) schoolUser = await SchoolModel.findOne({ where: { id, email } });
+    if (!user && !schoolUser) return res.status(401).json({ errors: ['Faça login novamente'] });
 
-    req.user = {
-      Id: user.id,
-      Email: user.email,
-      Nome: user.nome,
-      Sobrenome: user.sobrenome,
-      Level: user.level,
-      School_id: user.school_id,
-    };
+    if (user) {
+      req.user = {
+        Id: user.id,
+        Email: user.email,
+        Nome: user.nome,
+        Sobrenome: user.sobrenome,
+        Level: user.level,
+        School_id: user.school_id,
+      };
+    }
+    if (schoolUser) {
+      req.user = {
+        Id: schoolUser.id,
+        Email: schoolUser.email,
+        Nome: schoolUser.name,
+        Cnpj: schoolUser.cnpj,
+        Level: 3,
+        School_id: schoolUser.id,
+      };
+    }
     return next();
   } catch (e) { return res.status(401).json({ errors: ['Permissão inválida'] }); }
 };

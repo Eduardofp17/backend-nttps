@@ -6,7 +6,7 @@ import sendEmail from "../utils/sendEmail";
 class UserController {
   async index(req, res) {
     try {
-      const users = await User.findAll({ attributes: ['id', 'nome', 'sobrenome', 'email', 'level'] });
+      const users = await User.findAll({ where: { school_id: req.user.School_id } }, { attributes: ['id', 'nome', 'sobrenome', 'email', 'level'] });
       return res.json(users);
     } catch (e) {
       return res.status(400).json({

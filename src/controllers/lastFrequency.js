@@ -15,7 +15,7 @@ class LastFrequencyController {
   }
 
   async create(frequencia) {
-    if (frequencia.Hour >= '07:00' && frequencia.Hour <= '08:50') {
+    if (frequencia.Hour >= '07:00' && frequencia.Hour <= '09:30') {
       const body = {
         sala: frequencia.sala,
         breakfast: frequencia.qtdPresentes,
@@ -26,7 +26,7 @@ class LastFrequencyController {
       };
       await FrequenciasHistoric.create(body);
     }
-    if (frequencia.Hour >= '09:10' && frequencia.Hour <= '11:30') {
+    if (frequencia.Hour >= '09:50' && frequencia.Hour <= '11:30') {
       const body = {
         sala: frequencia.sala,
         lunch: frequencia.qtdPresentes,
@@ -59,7 +59,7 @@ class LastFrequencyController {
         school_id: frequencia.school_id,
       },
     });
-    if (frequencia.Hour >= '07:00' && frequencia.Hour <= '08:50') {
+    if (frequencia.Hour >= '07:00' && frequencia.Hour <= '09:30') {
       const body = {
         sala: frequencia.sala,
         breakfast: frequencia.qtdPresentes,
@@ -70,7 +70,7 @@ class LastFrequencyController {
       };
       await frequenciasHistoric.update(body);
     }
-    if (frequencia.Hour >= '09:10' && frequencia.Hour <= '11:30') {
+    if (frequencia.Hour >= '09:50' && frequencia.Hour <= '11:30') {
       const body = {
         sala: frequencia.sala,
         lunch: frequencia.qtdPresentes,
