@@ -4,16 +4,23 @@ import codeGenerator from "../utils/code";
 import Token from "../utils/jwtEmail";
 import sendEmail from "../utils/sendEmail";
 import CNPJ from '../utils/cnpj';
+import User from '../models/User';
+import Frequencia from '../models/Frequencia';
+import Cardapios from '../models/Cardapios';
 
 class SchoolController {
   async index(req, res) {
     try {
       const schools = await SchoolModel.findAll({
         attributes: ["id", "name", "email", "cnpj", "code", "accepting_acounts"],
+        include: {
+          model: Cardapios,
+        },
       });
 
       return res.status(200).json(schools);
     } catch (e) {
+      console.log(e);
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
       });
@@ -26,7 +33,13 @@ class SchoolController {
       await school.update(req.body);
       return res.status(200).json({
         updated: true,
-        school,
+        school: {
+          id: school.id,
+          name: school.name,
+          cnpj: school.cnpj,
+          code: school.code,
+          accepting_acounts: school.accepting_acounts,
+        },
       });
     } catch (e) {
       return res.status(400).json({
@@ -38,17 +51,29 @@ class SchoolController {
   async create(req, res) {
     try {
       if (!req.body) return 'Please fill in the fields';
+      const schoolExist = await SchoolModel.findOne({ where: { email: req.body.email } });
+      if (schoolExist) return res.status(422).json({ created: false, msg: "School already exist" });
       req.body.code = codeGenerator();
       const isValid = await CNPJ.consultCnpj(req.body.cnpj);
       if (!isValid) return res.status(400).json("Invalid cnpj");
-      console.log(isValid);
       const school = await SchoolModel.create(req.body);
       const token = await Token.create(school.id, school.email);
       const link = `${process.env.APP_URL}:${process.env.APP_PORT}/school/confirm/${token}`;
-      await sendEmail(school.email, "email Verification", link);
+      const button = `<a href='${link}' style="font-family: inherit;
+      font-weight: 500;
+      font-size: 17px;
+      padding: 0.8em 1.5em 0.8em 1.2em;
+      color: white;
+     background: #185E2C;
+      border: none;
+      box-shadow: 0 0.7em 1.5em -0.5em #000;
+      letter-spacing: 0.05em;
+      border-radius: 20em; text-decoration: none;">Verificar email</a>`;
+      const textEmail = `Olá, ${req.body.name}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu email: <br><br><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
+      await sendEmail(school.email, "Validação de email", textEmail);
       return res.status(200).json({
         created: true,
-        school,
+        msg: "Account created successfully",
       });
     } catch (e) {
       return res.status(400).json({
