@@ -1,11 +1,11 @@
-import Frequencia from "../models/Frequencia";
-import LastFrequencyController from "./lastFrequency";
-import FrequenciasHistoric from "../models/LastFrequency";
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _Frequencia = require('../models/Frequencia'); var _Frequencia2 = _interopRequireDefault(_Frequencia);
+var _lastFrequency = require('./lastFrequency'); var _lastFrequency2 = _interopRequireDefault(_lastFrequency);
+var _LastFrequency = require('../models/LastFrequency'); var _LastFrequency2 = _interopRequireDefault(_LastFrequency);
 
 class FrequenciaController {
   async index(req, res) {
     try {
-      const frequencias = await Frequencia.findAll({ where: { school_id: req.user.School_id } });
+      const frequencias = await _Frequencia2.default.findAll({ where: { school_id: req.user.School_id } });
       return res.json(frequencias);
     } catch (e) {
       return res.status(400).json({
@@ -16,7 +16,7 @@ class FrequenciaController {
 
   async update(req, res) {
     try {
-      const sala = await Frequencia.findOne({
+      const sala = await _Frequencia2.default.findOne({
         where: { sala: req.body.sala, school_id: req.user.School_id },
       });
       if (!sala) return res.status(400).json({ errors: ['A sala não existe'] });
@@ -30,7 +30,7 @@ class FrequenciaController {
       req.body.Hour = `${new Date().getHours()}:${new Date().getMinutes()}`;
       const frequenciaAtt = await sala.update(req.body);
 
-      const find = await FrequenciasHistoric.findOne({
+      const find = await _LastFrequency2.default.findOne({
         where: {
           sala: req.body.sala,
           Date: req.body.Date,
@@ -38,9 +38,9 @@ class FrequenciaController {
         },
       });
       if (!find) {
-        await LastFrequencyController.create(req.body);
+        await _lastFrequency2.default.create(req.body);
       } else {
-        await LastFrequencyController.update(req.body);
+        await _lastFrequency2.default.update(req.body);
       }
       return res.json(frequenciaAtt);
     } catch (e) {
@@ -56,14 +56,14 @@ class FrequenciaController {
       if (!req.user.School_id) return res.status(401).json("You must be associate to an school");
       req.body.updated_by = `${req.user.Nome} ${req.user.Sobrenome}`;
       req.body.school_id = req.user.School_id;
-      const exist = await Frequencia.findOne({
+      const exist = await _Frequencia2.default.findOne({
         where: {
           sala: req.body.sala,
           school_id: req.user.School_id,
         },
       });
       if (exist) return res.status(400).json("Sala already exist");
-      const frequencia = await Frequencia.create(req.body);
+      const frequencia = await _Frequencia2.default.create(req.body);
 
       return res.status(200).json(frequencia);
     } catch (e) {
@@ -82,7 +82,7 @@ class FrequenciaController {
         });
       }
 
-      const frequencia = await Frequencia.findByPk(req.params.id);
+      const frequencia = await _Frequencia2.default.findByPk(req.params.id);
       if (!frequencia) {
         return res.status(400).json({
           deleted: false,
@@ -103,4 +103,4 @@ class FrequenciaController {
   }
 }
 
-export default new FrequenciaController();
+exports. default = new FrequenciaController();
