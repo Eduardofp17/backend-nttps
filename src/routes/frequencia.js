@@ -11,4 +11,5 @@ router.get("/", loginRequired, leaderRequired, FrequenciaController.index);
 router.put("/", loginRequired, leaderRequired, FrequenciaController.update);
 router.get("/history", loginRequired, employeeRequired, lastFrequency.index);
 router.post("/", loginRequired, employeeRequired, FrequenciaController.create);
+router.delete("/:id", loginRequired, employeeRequired, FrequenciaController.delete);
 export default router;
