@@ -10,7 +10,7 @@ class TokenController {
     const user = await _User2.default.findOne({ where: { email } });
     let schoolUser;
     if (!user) schoolUser = await _School2.default.findOne({ where: { email } });
-    if (!user && !schoolUser) return res.status(401).json({ errors: ['Usuário não existe'] });
+    if (!user && !schoolUser) return res.status(400).json({ errors: ['Usuário não existe'] });
     if (schoolUser) {
       if (!await
       schoolUser.passwordValid(password)) return res.status(400).json({ errors: ['Email ou senha inválidos'] });

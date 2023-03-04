@@ -5,7 +5,7 @@ class CardapioController {
   async index(req, res) {
     const cardapio = await Cardapio.findAll({
       where: {
-        school_id: req.user.School_id, weeknumber: Semanas.pegarDataAtual(),
+        weeknumber: Semanas.pegarDataAtual(),
       },
     });
     return res.json(cardapio);
@@ -30,9 +30,10 @@ class CardapioController {
     try {
       if (!req.body.dayname) return res.status(400).json("Please fill the field with the day name");
       if (!req.user.School_id) return res.status(401).json("Make login, seu gaiato");
-      if (!req.body.Breakfast && !req.body.Lunch && !req.body.AfternoonSnack) return res.status(400).json("Please fill one of these fields: Breakfast, Lunch, Afternoonsnack");
+      if (!req.body.breakfast && !req.body.lunch && !req.body.afternoonsnack) return res.status(400).json("Please fill one of these fields: Breakfast, Lunch, Afternoonsnack");
 
       req.body.school_id = req.user.School_id;
+      if (!req.body.weeknumber) return res.status(400).json({ msg: "Please type the weekNumber" });
       const cardapioExist = await Cardapio.findOne({
         where: {
           dayname: req.body.dayname,
@@ -47,6 +48,7 @@ class CardapioController {
         cardapio,
       });
     } catch (e) {
+      console.log(e);
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
       });

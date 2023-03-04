@@ -54,7 +54,7 @@ export default class SchoolModel extends Model {
           },
         },
       },
-      accepting_acounts: {
+      accepting_accounts: {
         type: Sequelize.BOOLEAN,
         allowNull: true,
         defaultValue: false,

@@ -1,8 +1,8 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('frequencia', 'school_id', {
-      type: Sequelize.INTEGER,
+    await queryInterface.addColumn('Schools', 'password_hash', {
+      type: Sequelize.STRING,
       allowNull: false,
     });
   },

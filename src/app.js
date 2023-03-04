@@ -15,14 +15,14 @@ import requestsRoutes from './routes/request';
 
 const express = require('express');
 
-const whitelist = ['https://receitaws.com.br/'];
+const whitelist = ['http://192.168.1.6:5173', 'http://192.168.1.3:5173', "http://localhost:5173"];
 
 const corsOptions = {
   origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS me'));
+      callback(new Error('Not allowed by CORS'));
     }
   },
 };
@@ -34,8 +34,8 @@ class App {
   }
 
   middlewares() {
-    this.app.use(helmet());
     this.app.use(cors(corsOptions));
+    this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());

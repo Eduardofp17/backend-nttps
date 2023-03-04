@@ -12,7 +12,7 @@ class SchoolController {
   async index(req, res) {
     try {
       const schools = await SchoolModel.findAll({
-        attributes: ["id", "name", "email", "cnpj", "code", "accepting_acounts"],
+        attributes: ["id", "name", "email", "cnpj", "code", "accepting_accounts"],
         include: {
           model: Cardapios,
         },
@@ -20,7 +20,6 @@ class SchoolController {
 
       return res.status(200).json(schools);
     } catch (e) {
-      console.log(e);
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
       });
@@ -55,7 +54,7 @@ class SchoolController {
       if (schoolExist) return res.status(422).json({ created: false, msg: "School already exist" });
       req.body.code = codeGenerator();
       const isValid = await CNPJ.consultCnpj(req.body.cnpj);
-      if (!isValid) return res.status(400).json("Invalid cnpj");
+      if (!isValid) return res.status(400).json({ created: false, msg: "Invalid Cnpj" });
       const school = await SchoolModel.create(req.body);
       const token = await Token.create(school.id, school.email);
       const link = `${process.env.APP_URL}:${process.env.APP_PORT}/school/confirm/${token}`;
@@ -69,7 +68,7 @@ class SchoolController {
       box-shadow: 0 0.7em 1.5em -0.5em #000;
       letter-spacing: 0.05em;
       border-radius: 20em; text-decoration: none;">Verificar email</a>`;
-      const textEmail = `Olá, ${req.body.name}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu email: <br><br><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
+      const textEmail = `Saudações, ${req.body.name}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu e-mail: <br><br><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
       await sendEmail(school.email, "Validação de email", textEmail);
       return res.status(200).json({
         created: true,

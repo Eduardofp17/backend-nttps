@@ -15,7 +15,7 @@ var _request = require('./routes/request'); var _request2 = _interopRequireDefau
 
 const express = require('express');
 
-const whitelist = ['https://receitaws.com.br/'];
+const whitelist = ['http://192.168.1.6:5173'];
 
 const corsOptions = {
   origin(origin, callback) {
@@ -34,8 +34,8 @@ class App {
   }
 
   middlewares() {
-    this.app.use(_helmet2.default.call(void 0, ));
     this.app.use(_cors2.default.call(void 0, corsOptions));
+    this.app.use(_helmet2.default.call(void 0, ));
     this.app.use(_compression2.default.call(void 0, ));
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());

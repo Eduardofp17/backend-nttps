@@ -19,10 +19,17 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
       },
       password_hash: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      level: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      school_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {
