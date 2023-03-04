@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Frequencia', {
+    await queryInterface.createTable('frequencia', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -12,12 +12,24 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      frequencia: {
+      qtdPresentes: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       updated_by: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      Date: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      Hour: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      school_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {
@@ -32,6 +44,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Frequencia');
+    await queryInterface.dropTable('frequencia');
   },
 };

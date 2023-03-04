@@ -1,26 +1,44 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Schools', {
+    await queryInterface.createTable('frequencia_historics', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      sala: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
+      breakfast: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
-      cnpj: {
+      lunch: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      afternoonsnack: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      updated_by: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+      },
+      Date: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      Hour: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      school_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
@@ -34,6 +52,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Schools');
+    await queryInterface.dropTable('frequencia_historics');
   },
 };

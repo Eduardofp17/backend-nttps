@@ -1,31 +1,39 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('lastFrequency', {
+    await queryInterface.createTable('Requests', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      sala: {
+      nome: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      breakfast: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      lunch: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      afternoonsnack: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      updated_by: {
+      sobrenome: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      password_hash: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      verified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      school_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       created_at: {
@@ -40,6 +48,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('lastFrequency');
+    await queryInterface.dropTable('Requests');
   },
 };

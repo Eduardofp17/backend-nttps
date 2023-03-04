@@ -47,7 +47,7 @@ export default class Cardapios extends Model {
           },
         },
       },
-    }, { sequelize });
+    }, { sequelize, tableName: 'cardapios' });
     return this;
   }
 

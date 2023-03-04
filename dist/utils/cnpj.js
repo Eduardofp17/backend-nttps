@@ -1,4 +1,4 @@
-class CNPJ {
+"use strict";class CNPJ {
   static formatCnpj(cnpj) {
     cnpj = String(cnpj);
     const letters = /[a-z]/gi;
