@@ -33,7 +33,7 @@ class CardapioController {
       if (!req.body.breakfast && !req.body.lunch && !req.body.afternoonsnack) return res.status(400).json("Please fill one of these fields: Breakfast, Lunch, Afternoonsnack");
 
       req.body.school_id = req.user.School_id;
-      if (!req.body.weeknumber) return res.status(400).json({ msg: "Please type the weekNumber" });
+      if (req.body.weeknumber !== 1 && req.body.weeknumber !== 0) return res.status(400).json({ msg: "Please type the weekNumber" });
       const cardapioExist = await Cardapio.findOne({
         where: {
           dayname: req.body.dayname,
@@ -48,7 +48,6 @@ class CardapioController {
         cardapio,
       });
     } catch (e) {
-      console.log(e);
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),
       });
