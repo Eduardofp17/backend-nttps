@@ -15,7 +15,7 @@ import requestsRoutes from './routes/request';
 
 const express = require('express');
 
-const whitelist = ["http://localhost:5173", "https://frontend-ntpps.vercel.app", "http://34.95.218.151"];
+const whitelist = ["http://localhost:5173", "http://34.151.204.13"];
 
 const corsOptions = {
   origin(origin, callback) {
