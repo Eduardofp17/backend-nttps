@@ -41,7 +41,7 @@ class CardapioController {
           school_id: req.user.School_id,
         },
       });
-      if (cardapioExist) return res.status(400).json("Cardapio already exist, plesa try to update it");
+      if (cardapioExist) return res.status(400).json("Cardapio already exist, please try to update it");
       const cardapio = await Cardapio.create(req.body);
       return res.status(200).json({
         msg: "Successfully created",
