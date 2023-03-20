@@ -57,7 +57,7 @@ class CardapioController {
   async delete(req, res) {
     try {
       if (!req.params.id) return res.status(400).json({ error: 'Missing ID' });
-      if (!req.user.School_id) return res.status(401).json("Make login, seu gaiato");
+      if (!req.user.School_id) return res.status(401).json("Make login");
 
       const cardapio = await Cardapio.findOne({
         where: {

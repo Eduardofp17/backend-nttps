@@ -47,7 +47,7 @@
           },
         },
       },
-    }, { sequelize });
+    }, { sequelize, tableName: 'cardapios' });
     return this;
   }
 
