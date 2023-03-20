@@ -5,7 +5,7 @@ var _employeeRequired = require('../middlewares/employeeRequired'); var _employe
 
 const router = new (0, _express.Router)();
 
-router.get("/", _loginRequired2.default, _cardapio2.default.index);
+router.get("/", _cardapio2.default.index);
 router.put("/:id", _loginRequired2.default, _employeeRequired2.default, _cardapio2.default.update);
 router.post("/", _loginRequired2.default, _employeeRequired2.default, _cardapio2.default.create);
 router.delete("/:id", _loginRequired2.default, _employeeRequired2.default, _cardapio2.default.delete);

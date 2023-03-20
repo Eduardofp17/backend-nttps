@@ -65,11 +65,22 @@ class UserController {
         token = await _jwtEmail2.default.create(schoolUser.id, schoolUser.email);
       }
       const link = `${process.env.APP_URL}:${process.env.APP_PORT}/users/redefine/${token}`;
+      const button = `<a href='${link}' style="font-family: inherit;
+      font-weight: 500;
+      font-size: 17px;
+      padding: 0.8em 1.5em 0.8em 1.2em;
+      color: white;
+     background: #185E2C;
+      border: none;
+      box-shadow: 0 0.7em 1.5em -0.5em #000;
+      letter-spacing: 0.05em;
+      border-radius: 20em; text-decoration: none;">Redefinir senha</a>`;
+      const textEmail = `Clicando nesse botão você poderá redefinir sua senha: <br><br><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
       if (user) {
-        await _sendEmail2.default.call(void 0, user.email, "Enviamos um email para você, clicando no link você poderá redefinir sua senha", link);
+        await _sendEmail2.default.call(void 0, user.email, "Redefinir senha", textEmail);
       }
       if (schoolUser) {
-        await _sendEmail2.default.call(void 0, schoolUser.email, "Enviamos um email para você, clicando no link você poderá redefinir sua senha", link);
+        await _sendEmail2.default.call(void 0, schoolUser.email, "Redefinir senha", textEmail);
       }
       return res.status(200).json("Email successfully sent");
     } catch (e) {

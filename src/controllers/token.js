@@ -26,7 +26,11 @@ class TokenController {
       process.env.TOKEN_SECRET,
       { expiresIn: process.env.TOKEN_EXPIRATION },
     );
-    return res.send({ token, level: schoolUser ? 3 : user.level });
+    return res.send({
+      token,
+      level: schoolUser ? 3 : user.level,
+      school_id: schoolUser ? schoolUser.id : user.school_id,
+    });
   }
 }
 

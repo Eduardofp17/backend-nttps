@@ -54,7 +54,7 @@ var _bcryptjs = require('bcryptjs'); var _bcryptjs2 = _interopRequireDefault(_bc
           },
         },
       },
-      accepting_acounts: {
+      accepting_accounts: {
         type: _sequelize2.default.BOOLEAN,
         allowNull: true,
         defaultValue: false,

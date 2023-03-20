@@ -20,25 +20,36 @@ class RequestsController {
 
   async create(req, res) {
     try {
-      if (!req.body.code) return res.status(400).json("Please fill the field with an code");
+      if (!req.body.code) return res.status(400).json({ created: false, msg: "Please fill the field with an code" });
 
       const school = await _School2.default.findOne({ where: { code: req.body.code } });
-      if (!school) return res.status(400).json("School don't exist");
+      if (!school) return res.status(400).json({ created: false, msg: "School don't exist" });
 
-      if (school.accepting_acounts < 1) return res.status(422).json("School is not accepting new accounts");
+      if (school.accepting_acounts < 1) return res.status(422).json({ created: false, msg: "School is not accepting new accounts" });
       const hasRequest = await _Request2.default.findOne({ where: { email: req.body.email } });
-      if (hasRequest) return res.status(400).json("Request already exist");
+      if (hasRequest) return res.status(400).json({ craeted: false, msg: "Request already exist" });
 
       const userExist = await _User2.default.findOne({ where: { email: req.body.email } });
-      if (userExist) return res.status(400).json("User already exist");
+      if (userExist) return res.status(400).json({ created: false, msg: "User already exist" });
       req.body.school_id = school.id;
       req.body.status = "Pending";
       const request = await _Request2.default.create(req.body);
-      if (!request) return res.status(500).json("An error ocurred");
+      if (!request) return res.status(500).json({ created: false, msg: "An error ocurred" });
       const token = await _jwtEmail2.default.create(request.id, request.email);
       const link = `${process.env.APP_URL}:${process.env.APP_PORT}/requests/confirm/${token}`;
-      await _sendEmail2.default.call(void 0, request.email, "email Verification", link);
-      return res.status(200).json("Request sent successfully");
+      const button = `<a href='${link}' style="font-family: inherit;
+      font-weight: 500;
+      font-size: 17px;
+      padding: 0.8em 1.5em 0.8em 1.2em;
+      color: white;
+     background: #185E2C;
+      border: none;
+      box-shadow: 0 0.7em 1.5em -0.5em #000;
+      letter-spacing: 0.05em;
+      border-radius: 20em; text-decoration: none;">Verificar email</a>`;
+      const textEmail = `Saudações, ${req.body.name}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu e-mail: <br><br><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
+      await _sendEmail2.default.call(void 0, request.email, "Validação de email", textEmail);
+      return res.status(200).json({ created: true, msg: "Request sent successfully" });
     } catch (e) {
       return res.status(400).json({
         errors: e.errors.map((err) => err.message),

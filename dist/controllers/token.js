@@ -10,7 +10,7 @@ class TokenController {
     const user = await _User2.default.findOne({ where: { email } });
     let schoolUser;
     if (!user) schoolUser = await _School2.default.findOne({ where: { email } });
-    if (!user && !schoolUser) return res.status(400).json({ errors: ['Usuário não existe'] });
+    if (!user && !schoolUser) return res.status(400).json({ errors: ['Email ou senha inválidos'] });
     if (schoolUser) {
       if (!await
       schoolUser.passwordValid(password)) return res.status(400).json({ errors: ['Email ou senha inválidos'] });
@@ -26,8 +26,11 @@ class TokenController {
       process.env.TOKEN_SECRET,
       { expiresIn: process.env.TOKEN_EXPIRATION },
     );
-
-    return res.send({ token });
+    return res.send({
+      token,
+      level: schoolUser ? 3 : user.level,
+      school_id: schoolUser ? schoolUser.id : user.school_id,
+    });
   }
 }
 

@@ -15,14 +15,14 @@ var _request = require('./routes/request'); var _request2 = _interopRequireDefau
 
 const express = require('express');
 
-const whitelist = ['http://192.168.1.6:5173'];
+const whitelist = ["http://localhost:5173", "http://34.151.204.13"];
 
 const corsOptions = {
   origin(origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS me'));
+      callback(new Error('Not allowed by CORS'));
     }
   },
 };
