@@ -25,7 +25,7 @@ class RequestsController {
       const school = await SchoolModel.findOne({ where: { code: req.body.code } });
       if (!school) return res.status(400).json({ created: false, msg: "School don't exist" });
 
-      if (school.accepting_acounts < 1) return res.status(422).json({ created: false, msg: "School is not accepting new accounts" });
+      if (school.accepting_accounts < 1) return res.status(422).json({ created: false, msg: "School is not accepting new accounts" });
       const hasRequest = await RequestsModel.findOne({ where: { email: req.body.email } });
       if (hasRequest) return res.status(400).json({ craeted: false, msg: "Request already exist" });
 
@@ -47,7 +47,7 @@ class RequestsController {
       box-shadow: 0 0.7em 1.5em -0.5em #000;
       letter-spacing: 0.05em;
       border-radius: 20em; text-decoration: none;">Verificar email</a>`;
-      const textEmail = `Saudações, ${req.body.name}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu e-mail: <br><br><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
+      const textEmail = `<h2> Saudações, ${req.body.nome}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu e-mail: </h2><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
       await sendEmail(request.email, "Validação de email", textEmail);
       return res.status(200).json({ created: true, msg: "Request sent successfully" });
     } catch (e) {
