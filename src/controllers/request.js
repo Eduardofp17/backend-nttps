@@ -47,7 +47,7 @@ class RequestsController {
       box-shadow: 0 0.7em 1.5em -0.5em #000;
       letter-spacing: 0.05em;
       border-radius: 20em; text-decoration: none;">Verificar email</a>`;
-      const textEmail = `<h2> Saudações, ${req.body.nome}. Estamos felizes por vocês aderirem à nossa plataforma. Por favor, clique nesse botão para verificarmos seu e-mail: </h2><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
+      const textEmail = `<h2> Saudações, ${req.body.nome}. Sua solicitação foi enviada com sucesso, mas antes, por favor, clique nesse botão para verificarmos seu e-mail: </h2><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
       await sendEmail(request.email, "Validação de email", textEmail);
       return res.status(200).json({ created: true, msg: "Request sent successfully" });
     } catch (e) {
@@ -102,7 +102,7 @@ class RequestsController {
       box-shadow: 0 0.7em 1.5em -0.5em #000;
       letter-spacing: 0.05em;
       border-radius: 20em; text-decoration: none;">Faça login aqui</a>`;
-      const text = `Olá ${newUser.nome} seu pedido para fazer parte da instituição ${school.name} foi aceito com sucesso.  Faça login clicando aqui: <br> <br> ${button} `;
+      const text = `<h2> Olá ${newUser.nome} seu pedido para fazer parte da instituição ${school.name} foi aceito com sucesso.  Faça login clicando aqui: </h2> <br> <br> ${button} `;
       await sendEmail(req.body.email, "Registro em nossa plataforma", text);
       return res.status(200).json("Created account");
     } catch (e) {
@@ -120,7 +120,7 @@ class RequestsController {
       await request.destroy();
       const school = await SchoolModel.findByPk(request.school_id);
       if (!school) return res.status(422).json("School doesn't exist");
-      const text = `Olá, ${request.nome}. Seu pedido para fazer parte da instituição ${school.name} foi rejeitado.`;
+      const text = `<h2> Olá, ${request.nome}. Seu pedido para fazer parte da instituição ${school.name} foi rejeitado. </h2>`;
       await sendEmail(req.body.email, "Adesão de conta", text);
       return res.status(200).json("Rejected request");
     } catch (e) {
