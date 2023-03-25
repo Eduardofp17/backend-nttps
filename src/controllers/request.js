@@ -36,7 +36,7 @@ class RequestsController {
       const request = await RequestsModel.create(req.body);
       if (!request) return res.status(500).json({ created: false, msg: "An error ocurred" });
       const token = await Token.create(request.id, request.email);
-      const link = `${process.env.APP_URL}:${process.env.APP_PORT}/requests/confirm/${token}`;
+      const link = `${process.env.FRONTEND_URL}/createaccount/confirmemail/:v1?${token}`;
       const button = `<a href='${link}' style="font-family: inherit;
       font-weight: 500;
       font-size: 17px;
@@ -91,7 +91,7 @@ class RequestsController {
       await request.destroy();
       const school = await SchoolModel.findByPk(newUser.school_id);
       if (!school) return res.status(422).json("School doesn't exist");
-      const link = `${process.env.APP_URL}:${process.env.APP_PORT}/users/login/`;
+      const link = `${process.env.FRONTEND_URL}/login/`;
       const button = `<a href='${link}' style="font-family: inherit;
       font-weight: 500;
       font-size: 17px;
