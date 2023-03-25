@@ -64,7 +64,7 @@ class UserController {
       if (schoolUser) {
         token = await Token.create(schoolUser.id, schoolUser.email);
       }
-      const link = `${process.env.APP_URL}:${process.env.APP_PORT}/users/redefine/${token}`;
+      const link = `${process.env.FRONTEND_URL}/forgotpassword/redefine-password/:v1?${token}`;
       const button = `<a href='${link}' style="font-family: inherit;
       font-weight: 500;
       font-size: 17px;
