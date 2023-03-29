@@ -6,7 +6,7 @@ export default class Frequencia extends Model {
       sala: {
         type: Sequelize.STRING,
       },
-      qtdPresentes: {
+      qtd_presentes: {
         type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
@@ -38,7 +38,7 @@ export default class Frequencia extends Model {
         allowNull: false,
         defaultValue: `${new Date().getHours()}:${new Date().getMinutes()}`,
       },
-    }, { sequelize });
+    }, { sequelize, tableName: 'frequencia' });
     return this;
   }
 
