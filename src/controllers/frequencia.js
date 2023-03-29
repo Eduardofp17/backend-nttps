@@ -22,10 +22,9 @@ class FrequenciaController {
       if (!sala) return res.status(400).json({ errors: ['A sala não existe'] });
       if (!req.user.School_id) return res.status(401).json("You must be associate to an school");
       if (req.user.School_id !== sala.school_id) return res.status(401).json("Invalid permission");
-      const updated_by = `${req.user.Nome} ${req.user.Sobrenome}`;
 
       req.body.school_id = req.user.School_id;
-      req.body.updated_by = updated_by;
+      req.body.updated_by = `${req.user.Nome} ${req.user.Sobrenome ? req.user.Sobrenome : ''}`;
       req.body.Date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
       req.body.Hour = `${new Date().getHours()}:${new Date().getMinutes()}`;
       const frequenciaAtt = await sala.update(req.body);
@@ -54,7 +53,7 @@ class FrequenciaController {
     try {
       if (!req.body) return res.status(400).json("Please, fill in the fields");
       if (!req.user.School_id) return res.status(401).json("You must be associate to an school");
-      req.body.updated_by = `${req.user.Nome} ${req.user.Sobrenome}`;
+      req.body.updated_by = `${req.user.Nome} ${req.user.Sobrenome ? req.user.Sobrenome : ''}`;
       req.body.school_id = req.user.School_id;
       const exist = await Frequencia.findOne({
         where: {
