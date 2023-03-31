@@ -36,6 +36,7 @@ class FrequenciaController {
           school_id: req.user.School_id,
         },
       });
+
       if (!find) {
         await LastFrequencyController.create(req.body);
       } else {
