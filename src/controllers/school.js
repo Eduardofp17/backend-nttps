@@ -57,7 +57,7 @@ class SchoolController {
       if (!isValid) return res.status(400).json({ created: false, msg: "Invalid Cnpj" });
       const school = await SchoolModel.create(req.body);
       const token = await Token.create(school.id, school.email);
-      const link = `${process.env.APP_URL}:${process.env.APP_PORT}/school/confirm/${token}`;
+      const link = `${process.env.FRONTEND_URL}/createaccount/confirmemail-school/:v1?${token}`;
       const button = `<a href='${link}' style="font-family: inherit;
       font-weight: 500;
       font-size: 17px;
@@ -90,6 +90,7 @@ class SchoolController {
       const school = await SchoolModel.findByPk(id);
       if (!school) return res.status(400).json("School doesn't exist");
       await school.update({ verified: true });
+      console.log('Verifiquei');
       return res.status(200).json("Email verified");
     } catch (e) {
       return res.status(500).json("Internal server error");
