@@ -1,7 +1,14 @@
 class Semanas {
   static getWeekNumOfMonthOfDate(d) {
-    const firstDay = new Date(d.getFullYear(), d.getMonth(), 1).getDay();
-    return Math.ceil((d.getDate() + (firstDay - 1)) / 7);
+    const onejan = new Date(d.getFullYear(), 0, 1);
+    const year = d.getFullYear();
+    const week = Math.ceil(
+      (((d.getTime() - onejan.getTime()) / 86400000) + onejan.getDay() + 1) / 7,
+    );
+    if (week === 22) {
+      return week;
+    }
+    return week + 1;
   }
 
   static pegarDataAtual() {
@@ -10,7 +17,6 @@ class Semanas {
     const mm = today.getMonth();
     const dd = today.getDate();
     this.weekNumOfDate = this.getWeekNumOfMonthOfDate(new Date(yy, mm, dd));
-
     this.semana = this.verificaSeaSemanaEimpar(this.weekNumOfDate);
     return this.semana;
   }
