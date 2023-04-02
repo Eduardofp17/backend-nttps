@@ -15,7 +15,7 @@ import requestsRoutes from './routes/request';
 
 const express = require('express');
 
-const whitelist = ["http://localhost:5173", "http://34.151.204.13"];
+const whitelist = ["http://localhost:5173", "https://nourishnet.net"];
 
 const corsOptions = {
   origin(origin, callback) {
@@ -49,6 +49,10 @@ class App {
     this.app.use("/frequencia/", frequenciaRoutes);
     this.app.use("/school/", schoolRoutes);
     this.app.use("/requests/", requestsRoutes);
+    // Load test
+    this.app.use("/loaderio-2ce44c64675215a24a8f093a9658d518/", (req, res) => {
+      res.send("loaderio-2ce44c64675215a24a8f093a9658d518");
+    });
   }
 }
 
