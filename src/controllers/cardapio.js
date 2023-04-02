@@ -3,12 +3,39 @@ import Semanas from "../utils/weekNumber";
 
 class CardapioController {
   async index(req, res) {
-    const cardapio = await Cardapio.findAll({
+    const cardapios = await Cardapio.findAll({
       where: {
         weeknumber: Semanas.pegarDataAtual(),
       },
     });
-    return res.json(cardapio);
+
+    return res.json(cardapios);
+  }
+
+  async indexAll(req, res) {
+    const cardapios = await Cardapio.findAll({ where: { school_id: 5 } });
+    const days = [
+      'Domingo',
+      'Segunda-feira',
+      'Terça-feira',
+      'Quarta-feira',
+      'Quinta-feira',
+      'Sexta-feira',
+      'Sábado',
+    ];
+    const position = (Day) => {
+      const pos = days.indexOf(Day);
+      return pos;
+    };
+    cardapios.map((cardapio) => {
+      cardapio.position = position(cardapio.dayname);
+    });
+    cardapios.sort((a, b) => {
+      if (a.position < b.position) return -1;
+      if (a.position > b.position) return 1;
+      return 0;
+    });
+    return res.json(cardapios);
   }
 
   async update(req, res) {
