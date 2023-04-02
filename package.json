@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:unit": "jest",
-    "test:carga": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2] --headers Authorization='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJlZGFyZG9mZXJuYW5kZXNwaW5oZWlyb0BnbWFpbC5jb20iLCJpYXQiOjE2Nzk1OTE3NDAsImV4cCI6MTY4MDE5NjU0MH0.YxDo4baNGT8TlEfjzoLSFtDrmPMrEXlRv6ZB7JWqCPQ' http://34.95.218.151/cardapio/",
+    "test:carga:bearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2] --headers Authorization='Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJlZGFyZG9mZXJuYW5kZXNwaW5oZWlyb0BnbWFpbC5jb20iLCJpYXQiOjE2Nzk1OTE3NDAsImV4cCI6MTY4MDE5NjU0MH0.YxDo4baNGT8TlEfjzoLSFtDrmPMrEXlRv6ZB7JWqCPQ' http://34.95.218.151/cardapio/",
+    "test:carga:Nobearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2]  http://34.151.204.13/tools",
     "dev": "nodemon src/server.js",
     "build": "sucrase ./src -d ./dist --transforms imports"
   },
