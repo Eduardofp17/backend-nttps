@@ -25,6 +25,7 @@ class RequestsController {
       const school = await SchoolModel.findOne({ where: { code: req.body.code } });
       if (!school) return res.status(400).json({ created: false, msg: "School don't exist" });
 
+      if (req.body.email === school.email) return res.status(400).json({ created: false, msg: "Invalid email or password" });
       if (school.accepting_accounts < 1) return res.status(422).json({ created: false, msg: "School is not accepting new accounts" });
       const hasRequest = await RequestsModel.findOne({ where: { email: req.body.email } });
       if (hasRequest) return res.status(400).json({ craeted: false, msg: "Request already exist" });
