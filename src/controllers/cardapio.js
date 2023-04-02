@@ -8,7 +8,27 @@ class CardapioController {
         weeknumber: Semanas.pegarDataAtual(),
       },
     });
-
+    const days = [
+      'Domingo',
+      'Segunda-feira',
+      'Terça-feira',
+      'Quarta-feira',
+      'Quinta-feira',
+      'Sexta-feira',
+      'Sábado',
+    ];
+    const position = (Day) => {
+      const pos = days.indexOf(Day);
+      return pos;
+    };
+    cardapios.map((cardapio) => {
+      cardapio.position = position(cardapio.dayname);
+    });
+    cardapios.sort((a, b) => {
+      if (a.position < b.position) return -1;
+      if (a.position > b.position) return 1;
+      return 0;
+    });
     return res.json(cardapios);
   }
 
