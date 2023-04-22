@@ -1,4 +1,5 @@
-"use strict";var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -34,65 +35,57 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-    up: function (queryInterface, Sequelize) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NodeMailer = void 0;
+var nodemailer_1 = require("nodemailer");
+var NodeMailer = /** @class */ (function () {
+    function NodeMailer(content) {
+        this.host = process.env.EMAIL_HOST;
+        this.service = process.env.EMAIL_SERVICE;
+        this.port = process.env.EMAIL_PORT;
+        this.name = process.env.EMAIL_NAME;
+        this.user = process.env.EMAIL_USER;
+        this.password = process.env.EMAIL_PASSWORD;
+        this.secure = process.env.SECURE;
+        this.email = content.email;
+        this.subject = content.subject;
+        this.html = content.html;
+        this.transporter = (0, nodemailer_1.createTransport)({
+            host: this.host,
+            service: this.service,
+            port: Number(this.port),
+            secure: Boolean(this.secure),
+            auth: {
+                user: this.user,
+                pass: this.password,
+            },
+        });
+    }
+    NodeMailer.prototype.SendEmail = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryInterface.createTable('cardapios', {
-                            id: {
-                                type: Sequelize.INTEGER,
-                                allowNull: false,
-                                autoIncrement: true,
-                                primaryKey: true,
-                            },
-                            dayname: {
-                                type: Sequelize.STRING,
-                                allowNull: false,
-                            },
-                            breakfast: {
-                                type: Sequelize.STRING,
-                                allowNull: false,
-                            },
-                            lunch: {
-                                type: Sequelize.STRING,
-                                allowNull: false,
-                            },
-                            afternoonsnack: {
-                                type: Sequelize.STRING,
-                                allowNull: false,
-                            },
-                            weeknumber: {
-                                type: Sequelize.INTEGER,
-                                allowNull: false,
-                            },
-                            created_at: {
-                                type: Sequelize.DATE,
-                                allowNull: false,
-                            },
-                            updated_at: {
-                                type: Sequelize.DATE,
-                                allowNull: false,
-                            },
-                        })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.transporter.sendMail({
+                                from: this.name,
+                                to: this.email,
+                                subject: this.subject,
+                                html: this.html,
+                            })];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/];
+                        return [2 /*return*/, 1];
+                    case 2:
+                        e_1 = _a.sent();
+                        console.log(e_1);
+                        return [2 /*return*/, 0];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
-    },
-    down: function (queryInterface) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, queryInterface.dropTable('cardapios')];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    },
-};
+    };
+    return NodeMailer;
+}());
+exports.NodeMailer = NodeMailer;
