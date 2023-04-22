@@ -1,0 +1,20 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+      "outDir": "./dist",
+      "allowJs": true,
+      "target": "es5",
+      "allowUnreachableCode": false,
+      "noImplicitReturns": true,
+      "noImplicitAny": true,
+      "typeRoots": [ "./typings" ],
+  },
+  "include": [
+      "./**/*"
+  ],
+  "exclude": [
+      "./plugins/**/*",
+      "./typings/**/*",
+      "./dist/**/*" // This is what fixed it!
+  ]
+}

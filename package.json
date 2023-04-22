@@ -8,12 +8,14 @@
     "test:carga:bearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2] --headers Authorization='Bearer REMOVED' http://34.95.218.151/cardapio/",
     "test:carga:Nobearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2]  http://34.151.204.13/tools",
     "dev": "nodemon src/server.js",
-    "build": "sucrase ./src -d ./dist --transforms imports"
+    "build": "tsc && sucrase ./dist -d ./dist --transforms imports",
+    "start": "node dist/src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/nodemailer": "^6.4.7",
     "autocannon": "^7.10.0",
     "eslint": "^8.30.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -34,6 +36,7 @@
     "nodemailer": "^6.9.1",
     "path": "^0.12.7",
     "sequelize": "^6.29.0",
-    "sucrase": "^3.29.0"
+    "sucrase": "^3.29.0",
+    "typescript": "^4.9.3"
   }
 }
