@@ -12,6 +12,7 @@ import tokenRoutes from './routes/tokenRoutes';
 import frequenciaRoutes from './routes/frequencia';
 import schoolRoutes from './routes/school';
 import requestsRoutes from './routes/request';
+import emailRoutes from './routes/email';
 
 const express = require('express');
 
@@ -49,6 +50,7 @@ class App {
     this.app.use("/frequencia/", frequenciaRoutes);
     this.app.use("/school/", schoolRoutes);
     this.app.use("/requests/", requestsRoutes);
+    this.app.use("/email/", emailRoutes);
     // Load test
     this.app.use("/loaderio-2ce44c64675215a24a8f093a9658d518/", (req, res) => {
       res.send("loaderio-2ce44c64675215a24a8f093a9658d518");

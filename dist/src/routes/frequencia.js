@@ -1,0 +1,15 @@
+"use strict";"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var frequencia_1 = require("../controllers/frequencia");
+var loginRequired_1 = require("../middlewares/loginRequired");
+var lastFrequency_1 = require("../controllers/lastFrequency");
+var leaderRequired_1 = require("../middlewares/leaderRequired");
+var employeeRequired_1 = require("../middlewares/employeeRequired");
+var router = new express_1.Router();
+router.get("/", loginRequired_1.default, leaderRequired_1.default, frequencia_1.default.index);
+router.put("/", loginRequired_1.default, leaderRequired_1.default, frequencia_1.default.update);
+router.get("/history", loginRequired_1.default, employeeRequired_1.default, lastFrequency_1.default.index);
+router.post("/", loginRequired_1.default, employeeRequired_1.default, frequencia_1.default.create);
+router.delete("/:id", loginRequired_1.default, employeeRequired_1.default, frequencia_1.default.delete);
+exports.default = router;
