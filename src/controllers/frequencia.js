@@ -17,7 +17,7 @@ class FrequenciaController {
   async update(req, res) {
     try {
       const sala = await Frequencia.findOne({
-        where: { sala: req.body.sala, school_id: req.user.School_id },
+        where: { id: req.params.id, school_id: req.user.School_id },
       });
       if (!sala) return res.status(400).json({ errors: ['A sala não existe'] });
       if (!req.user.School_id) return res.status(401).json("You must be associate to an school");
