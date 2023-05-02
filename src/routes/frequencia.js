@@ -8,7 +8,7 @@ import employeeRequired from '../middlewares/employeeRequired';
 const router = new Router();
 
 router.get("/", loginRequired, leaderRequired, FrequenciaController.index);
-router.put("/", loginRequired, leaderRequired, FrequenciaController.update);
+router.put("/:id", loginRequired, leaderRequired, FrequenciaController.update);
 router.get("/history", loginRequired, employeeRequired, lastFrequency.index);
 router.post("/", loginRequired, employeeRequired, FrequenciaController.create);
 router.delete("/:id", loginRequired, employeeRequired, FrequenciaController.delete);
