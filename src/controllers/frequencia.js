@@ -16,6 +16,8 @@ class FrequenciaController {
 
   async update(req, res) {
     try {
+      const { id } = req.params;
+      if (!id) return res.status(400).json({ errors: ['ID inválido'] });
       const sala = await Frequencia.findOne({
         where: { id: req.params.id, school_id: req.user.School_id },
       });
@@ -23,6 +25,7 @@ class FrequenciaController {
       if (!req.user.School_id) return res.status(401).json("You must be associate to an school");
       if (req.user.School_id !== sala.school_id) return res.status(401).json("Invalid permission");
 
+      req.body.sala = sala.sala;
       req.body.school_id = req.user.School_id;
       req.body.updated_by = `${req.user.Nome} ${req.user.Sobrenome ? req.user.Sobrenome : ''}`;
       req.body.Date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
@@ -44,9 +47,10 @@ class FrequenciaController {
       }
       return res.json(frequenciaAtt);
     } catch (e) {
-      return res.status(400).json({
-        errors: e.errors.map((err) => err.message),
-      });
+      console.log(e);
+      // return res.status(400).json({
+      //   errors: e.errors.map((err) => err.message),
+      // });
     }
   }
 
