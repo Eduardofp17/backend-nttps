@@ -2,9 +2,11 @@
   "name": "backend-nourishnet",
   "version": 2,
   "public": true,
-  "use": "@vercel/node",
-  "build": {
-    "entrypoint": "src/server.js"
+  "builds": [
+    { "src": "src/server.js", "use": "@vercel/node" }
+  ],
+  "functions": {
+    "api/*": { "use": "src/server.js" }
   },
   "routes": [
     {
