@@ -3,15 +3,15 @@
   "version": 2,
   "public": true,
   "builds": [
-    { "src": "src/server.js", "use": "@vercel/node" }
+    {
+      "src": "src/server.js",
+      "use": "@vercel/node"
+    }
   ],
-  "functions": {
-    "api/*": { "use": "src/server.js" }
-  },
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/server.js"
+      "dest": "/src/server.js"
     }
   ]
 }
