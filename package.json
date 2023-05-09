@@ -9,7 +9,7 @@
     "test:carga:Nobearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2]  http://34.151.204.13/tools",
     "dev": "nodemon src/server.js",
     "build": "sucrase ./src -d ./dist --transforms imports",
-    "start": "node dist/src/server.js"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
