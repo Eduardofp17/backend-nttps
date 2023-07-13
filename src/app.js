@@ -15,6 +15,8 @@ import requestsRoutes from './routes/request';
 import emailRoutes from './routes/email';
 
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger.json');
 
 const whitelist = ["http://localhost:5173", "https://nourishnet.net"];
 
@@ -27,6 +29,7 @@ const corsOptions = {
     }
   },
 };
+
 class App {
   constructor() {
     this.app = express();
@@ -51,6 +54,7 @@ class App {
     this.app.use("/school/", schoolRoutes);
     this.app.use("/requests/", requestsRoutes);
     this.app.use("/email/", emailRoutes);
+    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
     // Load test
     this.app.use("/loaderio-2ce44c64675215a24a8f093a9658d518/", (req, res) => {
       res.send("loaderio-2ce44c64675215a24a8f093a9658d518");
