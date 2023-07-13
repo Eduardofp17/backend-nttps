@@ -1,0 +1,373 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API NOURISHNET",
+    "version": "1.0.0",
+    "description": "This is the nourishnet api"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "TEST API"
+    }
+  ],
+  "paths": {
+    "/cardapio/": {
+      "get": {
+        "description": "Returns the menus for the current week",
+        "tags": [
+          "Cardapio"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of menus for the week",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cardapios"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new menu",
+        "tags": [
+          "Cardapio"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CardapioRequestBody"
+              },
+              "examples": {
+                "cardapio": {
+                  "value": {
+                    "dayname": "Segunda-feira",
+                    "breakfast": "Pao com ovo",
+                    "lunch": "carne",
+                    "afternoonsnack": "bolacha",
+                    "weeknumber": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post-Cardapios-response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Occurs if the \"dayname\" field is not filled or if the cardapio already exist, and you will receive a string describing the error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadPostRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Occurs if you are not logged in or do not have permission. The response will contain an array of error descriptions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cardapio/all/": {
+      "get": {
+        "description": "Returns all menus",
+        "tags": [
+          "Cardapio"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cardapios"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cardapio/{id}/": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "Numeric ID of the cardapio"
+        },
+        {
+          "in": "authorization",
+          "name": ["role"],
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "Only users with the aforementioned minimum role can access",
+          "examples":{
+              "role":{
+                "value": 3
+              }
+          }
+        }
+      ],
+      "put": {
+        "description": "Updates an existing menu",
+        "tags": ["Cardapio"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardapioResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This happens if you don't has specified the cardapio's ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples":{
+                  "error-return": {
+                    "value": "Missing ID"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "This happens if you don't has the role enough",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples":{
+                  "error-return": {
+                    "value": "Permissão inválida"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes an existing menu",
+        "tags": ["Cardapio"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This happens if you don't has specified the cardapio's ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples":{
+                  "error-return": {
+                    "value": "Missing ID"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "This happens if the cardapio's doesn't exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                },
+                "examples":{
+                  "error-return": {
+                    "value": "Cardapio doesn't exist"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Cardapios": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Cardapio"
+        }
+      },
+      "Cardapio": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "dayname": {
+            "type": "string"
+          },
+          "breakfast": {
+            "type": "string"
+          },
+          "lunch": {
+            "type": "string"
+          },
+          "afternoonsnack": {
+            "type": "string"
+          },
+          "weeknumber": {
+            "type": "number",
+            "description": "NUMBER that indicates the actual week"
+          },
+          "school_id": {
+            "type": "number",
+            "description": "ID that indicates the school to which the menu belongs"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "UTC date containing the date when the menu was created"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "UTC date containing the last date the menu was updated"
+          }
+        }
+      },
+      "CardapioRequestBody": {
+        "type": "object",
+        "properties": {
+          "dayname": {
+            "type": "string"
+          },
+          "breakfast": {
+            "type": "string"
+          },
+          "lunch": {
+            "type": "string"
+          },
+          "afternoonsnack": {
+            "type": "string"
+          },
+          "weeknumber": {
+            "type": "number",
+            "description": "NUMBER that indicates the actual week"
+          }
+        }
+      },
+      "Post-Cardapios-response": {
+        "type": "object",
+        "properties": {
+          "msg": {
+            "type": "string",
+            "description": "Successfully created"
+          },
+          "cardapio": {
+            "$ref": "#/components/schemas/Cardapio"
+          }
+        }
+      },
+      "BadPostRequest": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "UnauthorizedResponse": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Description of the invalid permission error."
+            }
+          }
+        }
+      },
+      "CardapioResponse": {
+        "type": "object",
+        "properties": {
+          "updated": {
+            "type": "boolean"
+          },
+          "theDoc": {
+            "$ref": "#/components/schemas/Cardapio"
+          }
+        }
+      },
+      "DeleteResponse": {
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
