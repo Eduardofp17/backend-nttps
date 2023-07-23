@@ -7,7 +7,11 @@ import SchoolModel from '../models/School';
 class UserController {
   async index(req, res) {
     try {
-      const users = await User.findAll({ where: { school_id: req.user.School_id } }, { attributes: ['id', 'nome', 'sobrenome', 'email', 'level'] });
+      const users = await User.findAll({
+        where: { school_id: req.user.School_id },
+        attributes: ['id', 'nome', 'sobrenome', 'email', 'level'],
+        raw: true,
+      });
       return res.json(users);
     } catch (e) {
       return res.status(400).json({
