@@ -61,7 +61,7 @@ class CardapioController {
   async update(req, res) {
     try {
       if (!req.params.id) return res.status(400).json({ error: 'Missing ID' });
-      if (req.userLevel < 3) return res.status(401).json({ error: 'Invalid permission' });
+      if (req.userLevel < 2) return res.status(401).json({ error: 'Invalid permission' });
       const cardapio = await Cardapio.findByPk(req.params.id);
       if (cardapio.school_id !== req.user.School_id) return res.status(401).json("You cannot update this cardapio");
       await cardapio.update(req.body);
