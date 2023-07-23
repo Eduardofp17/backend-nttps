@@ -61,9 +61,9 @@ class CardapioController {
   async update(req, res) {
     try {
       if (!req.params.id) return res.status(400).json({ error: 'Missing ID' });
+      if (req.userLevel < 3) return res.status(401).json({ error: 'Invalid permission' });
       const cardapio = await Cardapio.findByPk(req.params.id);
       if (cardapio.school_id !== req.user.School_id) return res.status(401).json("You cannot update this cardapio");
-      if (req.userLevel < 3) return res.status(401).json({ error: 'Permissão inválida' });
       await cardapio.update(req.body);
 
       return res.json({
@@ -75,6 +75,7 @@ class CardapioController {
 
   async create(req, res) {
     try {
+      if (req.userLevel < 2) return res.status(401).json({ error: 'Invalid permission' });
       if (!req.body.dayname) return res.status(400).json("Please fill the field with the day name");
       if (!req.user.School_id) return res.status(401).json("Please login in the site");
       if (!req.body.breakfast && !req.body.lunch && !req.body.afternoonsnack) return res.status(400).json("Please fill one of these fields: Breakfast, Lunch, Afternoonsnack");
@@ -112,7 +113,7 @@ class CardapioController {
           school_id: req.user.School_id,
         },
       });
-      if (!cardapio) return res.status(400).json("Cardapio doesn't exist");
+      if (!cardapio) return res.status(404).json("Cardapio not found");
       await cardapio.destroy();
 
       return res.status(200).json({
