@@ -63,6 +63,7 @@ class CardapioController {
       if (!req.params.id) return res.status(400).json({ error: 'Missing ID' });
       if (req.userLevel < 2) return res.status(401).json({ error: 'Invalid permission' });
       const cardapio = await Cardapio.findByPk(req.params.id);
+      if (!cardapio) return res.status(404).json("Cardapio not found");
       if (cardapio.school_id !== req.user.School_id) return res.status(401).json("You cannot update this cardapio");
       await cardapio.update(req.body);
 
@@ -70,7 +71,9 @@ class CardapioController {
         updated: true,
         theDoc: cardapio,
       });
-    } catch (e) { return res.status(400).json("An error ocurred"); }
+    } catch (e) {
+      return res.status(400).json("An error ocurred");
+    }
   }
 
   async create(req, res) {
