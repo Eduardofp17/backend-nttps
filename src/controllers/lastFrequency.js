@@ -15,84 +15,76 @@ class LastFrequencyController {
   }
 
   async create(frequencia) {
-    if (frequencia.Hour >= '07:00' && frequencia.Hour <= '09:30') {
+    const hour = new Date();
+    if (this.isBetweenHours(hour, '07:00', '09:30')) {
       const body = {
         sala: frequencia.sala,
-        breakfast: frequencia.qtdPresentes,
+        breakfast: frequencia.qtd_presentes,
         updated_by: frequencia.updated_by,
-        Date: frequencia.Date,
-        Hour: frequencia.Hour,
         school_id: frequencia.school_id,
       };
       await FrequenciasHistoric.create(body);
-    }
-    if (frequencia.Hour >= '09:50' && frequencia.Hour <= '11:30') {
+    } else if (this.isBetweenHours(hour, '09:50', '11:30')) {
       const body = {
         sala: frequencia.sala,
-        lunch: frequencia.qtdPresentes,
+        lunch: frequencia.qtd_presentes,
         updated_by: frequencia.updated_by,
-        Date: frequencia.Date,
-        Hour: frequencia.Hour,
         school_id: frequencia.school_id,
       };
       await FrequenciasHistoric.create(body);
-    }
-    if (frequencia.Hour >= '13:00' && frequencia.Hour <= '14:40') {
+    } else if (this.isBetweenHours(hour, '13:00', '14:40')) {
       const body = {
         sala: frequencia.sala,
-        afternoonsnack: frequencia.qtdPresentes,
+        afternoonsnack: frequencia.qtd_presentes,
         updated_by: frequencia.updated_by,
-        Date: frequencia.Date,
-        Hour: frequencia.Hour,
         school_id: frequencia.school_id,
       };
       await FrequenciasHistoric.create(body);
+    } else {
+      return 'Is not a valid turn';
     }
-    return 'Is not a valid turn';
   }
 
-  async update(frequencia) {
-    const frequenciasHistoric = await FrequenciasHistoric.findOne({
-      where: {
-        sala: frequencia.sala,
-        Date: frequencia.Date,
-        school_id: frequencia.school_id,
-      },
-    });
-    if (frequencia.Hour >= '07:00' && frequencia.Hour <= '09:30') {
-      const body = {
-        sala: frequencia.sala,
-        breakfast: frequencia.qtdPresentes,
-        updated_by: frequencia.updated_by,
-        Date: frequencia.Date,
-        Hour: frequencia.Hour,
-        school_id: frequencia.school_id,
-      };
-      await frequenciasHistoric.update(body);
+  async update(frequencia, qtd_presentes) {
+    const frequenciasHistoric = await FrequenciasHistoric.findByPk(frequencia.id);
+    const hour = new Date();
+    if (frequenciasHistoric) {
+      if (this.isBetweenHours(hour, '07:00', '09:30')) {
+        await frequenciasHistoric.update({
+          breakfast: Number(qtd_presentes),
+        });
+      } else if (this.isBetweenHours(hour, '09:50', '11:30')) {
+        await frequenciasHistoric.update({
+          lunch: Number(qtd_presentes),
+
+        });
+      } else if (this.isBetweenHours(hour, '13:00', '14:40')) {
+        await frequenciasHistoric.update({
+          afternoonsnack: Number(qtd_presentes),
+
+        });
+      } else {
+        return 'Is not a valid turn';
+      }
+    } else {
+      return 'Historic not found';
     }
-    if (frequencia.Hour >= '09:50' && frequencia.Hour <= '11:30') {
-      const body = {
-        sala: frequencia.sala,
-        lunch: frequencia.qtdPresentes,
-        updated_by: frequencia.updated_by,
-        Date: frequencia.Date,
-        Hour: frequencia.Hour,
-        school_id: frequencia.school_id,
-      };
-      await frequenciasHistoric.update(body);
-    }
-    if (frequencia.Hour >= '13:00' && frequencia.Hour <= '14:40') {
-      const body = {
-        sala: frequencia.sala,
-        afternoonsnack: frequencia.qtdPresentes,
-        updated_by: frequencia.updated_by,
-        Date: frequencia.Date,
-        Hour: frequencia.Hour,
-        school_id: frequencia.school_id,
-      };
-      await frequenciasHistoric.update(body);
-    }
-    return 'Is not a valid turn';
+  }
+
+  isBetweenHours(time, startHour, endHour) {
+    const timeWithoutSeconds = new Date(time);
+    timeWithoutSeconds.setSeconds(0, 0);
+
+    const startParts = startHour.split(':');
+    const endParts = endHour.split(':');
+
+    const startTime = new Date(timeWithoutSeconds);
+    startTime.setHours(parseInt(startParts[0], 10), parseInt(startParts[1], 10));
+
+    const endTime = new Date(timeWithoutSeconds);
+    endTime.setHours(parseInt(endParts[0], 10), parseInt(endParts[1], 10));
+
+    return timeWithoutSeconds >= startTime && timeWithoutSeconds <= endTime;
   }
 }
 

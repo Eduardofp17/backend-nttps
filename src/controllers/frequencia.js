@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Frequencia from "../models/Frequencia";
 import LastFrequencyController from "./lastFrequency";
 import FrequenciasHistoric from "../models/LastFrequency";
@@ -17,25 +18,30 @@ class FrequenciaController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      if (!id) return res.status(400).json({ errors: ['ID inválido'] });
+      if (!id) return res.status(400).json({ updated: false, msg: "Missing ID" });
       const sala = await Frequencia.findOne({
         where: { id: req.params.id, school_id: req.user.School_id },
       });
-      if (!sala) return res.status(400).json({ errors: ['A sala não existe'] });
-      if (!req.user.School_id) return res.status(401).json("You must be associate to an school");
-      if (req.user.School_id !== sala.school_id) return res.status(401).json("Invalid permission");
+      if (!sala) return res.status(404).json({ updated: false, msg: "Frequencia not found" });
+      if (!req.user.School_id) return res.status(401).json({ updated: false, msg: "You must be associate to an school" });
+      if (req.user.School_id !== sala.school_id) return res.status(401).json({ updated: false, msg: "Invalid permission" });
 
       req.body.sala = sala.sala;
       req.body.school_id = req.user.School_id;
       req.body.updated_by = `${req.user.Nome} ${req.user.Sobrenome ? req.user.Sobrenome : ''}`;
-      req.body.Date = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-      req.body.Hour = `${new Date().getHours()}:${new Date().getMinutes()}`;
       const frequenciaAtt = await sala.update(req.body);
+
+      const hoje = new Date();
+      const inicioDoDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate(), 0, 0, 0);
+      const fimDoDia = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate(), 23, 59, 59);
 
       const find = await FrequenciasHistoric.findOne({
         where: {
           sala: req.body.sala,
-          Date: req.body.Date,
+          updated_at: {
+            [Op.gte]: inicioDoDia,
+            [Op.lte]: fimDoDia,
+          },
           school_id: req.user.School_id,
         },
       });
@@ -43,14 +49,13 @@ class FrequenciaController {
       if (!find) {
         await LastFrequencyController.create(req.body);
       } else {
-        await LastFrequencyController.update(req.body);
+        await LastFrequencyController.update(find, req.body.qtd_presentes);
       }
       return res.json(frequenciaAtt);
     } catch (e) {
-      console.log(e);
-      // return res.status(400).json({
-      //   errors: e.errors.map((err) => err.message),
-      // });
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
     }
   }
 
@@ -88,7 +93,7 @@ class FrequenciaController {
 
       const frequencia = await Frequencia.findByPk(req.params.id);
       if (!frequencia) {
-        return res.status(400).json({
+        return res.status(404).json({
           deleted: false,
           msg: "Frequencia doesn't exist",
         });

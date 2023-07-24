@@ -6,5 +6,7 @@ export default async (req, res, next) => {
     if (req.user.Level < 1) return res.status(401).json("Invalid permission");
 
     return next();
-  } catch (e) { return res.status(401).json({ errors: ['Permissão inválida'] }); }
+  } catch (e) {
+    return res.status(401).json({ errors: ['Permissão inválida'] });
+  }
 };

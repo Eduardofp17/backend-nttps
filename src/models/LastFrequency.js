@@ -18,14 +18,6 @@ export default class FrequenciasHistoric extends Model {
       updated_by: {
         type: Sequelize.STRING,
       },
-      Date: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-      },
-      Hour: {
-        type: Sequelize.STRING,
-        defaultValue: '',
-      },
       school_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
