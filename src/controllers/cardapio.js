@@ -33,7 +33,7 @@ class CardapioController {
   }
 
   async indexAll(req, res) {
-    const cardapios = await Cardapio.findAll({ where: { school_id: 5 } });
+    const cardapios = await Cardapio.findAll({ where: { school_id: req.user.School_id } });
     const days = [
       'Domingo',
       'Segunda-feira',
