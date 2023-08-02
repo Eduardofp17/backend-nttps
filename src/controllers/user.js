@@ -9,7 +9,7 @@ class UserController {
     try {
       const users = await User.findAll({
         where: { school_id: req.user.School_id },
-        attributes: ['id', 'nome', 'sobrenome', 'email', 'level'],
+        attributes: ['id', 'nome', 'sobrenome', 'email', 'level', 'updated_at', 'created_at'],
         raw: true,
       });
       return res.json(users);
