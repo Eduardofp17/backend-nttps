@@ -895,6 +895,161 @@
           }
         }
       }
+    },
+    "/users/update-user-role/{id}": {
+      "put": {
+        "description": "Change the user role",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the user to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "level": {
+                    "type": "number",
+                    "description": "The new  user role"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User role successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "updated": {
+                      "type": "boolean"
+                    },
+                    "theDoc": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "nome": {
+                              "type": "string"
+                            },
+                            "sobrenome": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "school_id": {
+                              "type": "number"
+                            },
+                            "level": {
+                              "type": "string"
+                            }
+                            ,
+                            "updated_at": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            }
+
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+            "400": {
+              "description": "Bad request with error messages.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized - You cannot update this user as it is not linked to your institution.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "examples": {
+                    "example": {
+                      "value": {
+                        "errors": ["You cannot update this user as it is not linked to your institution"]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "examples": {
+                    "example": {
+                      "value": {
+                        "errors": ["User not found"]
+                      }
+                    }
+                  }
+                }
+              }
+          }
+        }
+      }
     }
   },
   "components": {

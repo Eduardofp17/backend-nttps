@@ -41,8 +41,31 @@ class UserController {
   async update(req, res) {
     try {
       const user = await User.findByPk(req.userId);
-      if (!user) return res.status(400).json({ errors: ['Usuário não existe'] });
+      if (!user) return res.status(404).json({ errors: ['User not found'] });
       await user.update(req.body);
+      return res.json({
+        updated: true,
+        theDoc: { user },
+      });
+    } catch (e) {
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
+    }
+  }
+
+  async updateRole(req, res) {
+    try {
+      const user = await User.findByPk(req.params.id, {
+        where: { school_id: req.user.School_id },
+        attributes: ['id', 'nome', 'sobrenome', 'email', 'school_id', 'level', 'updated_at', 'created_at'],
+
+      });
+      if (!user) return res.status(404).json({ errors: ['User not found'] });
+
+      if (user.school_id !== req.user.School_id) return res.status(401).json({ errors: ['You cannot update this user as it is not linked to your institution'] });
+      const { level } = req.body;
+      await user.update({ level });
       return res.json({
         updated: true,
         theDoc: { user },
