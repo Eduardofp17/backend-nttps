@@ -56,6 +56,7 @@ class UserController {
 
   async updateRole(req, res) {
     try {
+      if (!req.params.id) return res.status(400).json({ error: 'Missing ID' });
       const user = await User.findByPk(req.params.id, {
         where: { school_id: req.user.School_id },
         attributes: ['id', 'nome', 'sobrenome', 'email', 'school_id', 'level', 'updated_at', 'created_at'],
@@ -135,6 +136,19 @@ class UserController {
         await schoolUser.update({ password: req.body.password });
       }
       return res.status(200).json("Password redefined");
+    } catch (e) {
+      return res.status(500).json("Internal server error");
+    }
+  }
+
+  async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+      if (!id) return res.status(400).json({ error: 'Missing ID' });
+      const user = await User.findByPk(id);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      await user.destroy();
+      return res.status(200).json({ deleted: true, id });
     } catch (e) {
       return res.status(500).json("Internal server error");
     }

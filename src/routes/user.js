@@ -12,4 +12,5 @@ router.put("/", loginRequired, UserController.update);
 router.put("/update-user-role/:id", loginRequired, adminRequired, UserController.updateRole);
 router.post("/forgotPassword", UserController.redefinePass);
 router.put("/redefine/:id", UserController.redefinePassword);
+router.delete("/:id", loginRequired, adminRequired, UserController.deleteUser);
 export default router;
