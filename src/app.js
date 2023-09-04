@@ -14,11 +14,13 @@ import schoolRoutes from './routes/school';
 import requestsRoutes from './routes/request';
 import emailRoutes from './routes/email';
 
+const path = require('path');
+
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swagger.json');
 
-const whitelist = ["http://localhost:5173", "https://nourishnet.net"];
+const whitelist = ["http://localhost:5173", "https://nourishnet.net", "http://localhost:3090"];
 
 const corsOptions = {
   origin(origin, callback) {
@@ -41,9 +43,10 @@ class App {
     this.app.use(cors(corsOptions));
     this.app.use(helmet());
     this.app.use(compression());
-    this.app.use('/static', express.static(`${__dirname}/public`));
+    this.app.use('/static', express.static(path.join(__dirname, 'public')));
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
+    this.app.set('view engine', 'ejs');
   }
 
   routes() {
@@ -56,10 +59,6 @@ class App {
     this.app.use("/requests/", requestsRoutes);
     this.app.use("/email/", emailRoutes);
     this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-    // Load test
-    this.app.use("/loaderio-2ce44c64675215a24a8f093a9658d518/", (req, res) => {
-      res.send("loaderio-2ce44c64675215a24a8f093a9658d518");
-    });
   }
 }
 

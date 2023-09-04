@@ -5,6 +5,7 @@ import User from "../models/User";
 import Token from "../utils/jwtEmail";
 import sendEmail from "../utils/sendEmail";
 import AcceptUser from '../models/UserAccept';
+import NodeMailer from '../utils/nodemailer/pedido-aceito-nodemailer';
 
 class RequestsController {
   async index(req, res) {
@@ -38,18 +39,28 @@ class RequestsController {
       if (!request) return res.status(500).json({ created: false, msg: "An error ocurred" });
       const token = await Token.create(request.id, request.email);
       const link = `${process.env.FRONTEND_URL}/createaccount/confirmemail/:v1?${token}`;
-      const button = `<a href='${link}' style="font-family: inherit;
-      font-weight: 500;
-      font-size: 17px;
-      padding: 0.8em 1.5em 0.8em 1.2em;
-      color: white;
-     background: #185E2C;
-      border: none;
-      box-shadow: 0 0.7em 1.5em -0.5em #000;
-      letter-spacing: 0.05em;
-      border-radius: 20em; text-decoration: none;">Verificar email</a>`;
-      const textEmail = `<h2> Saudações, ${req.body.nome}. Sua solicitação foi enviada com sucesso, mas antes, por favor, clique nesse botão para verificarmos seu e-mail: </h2><br><br> ${button}.<br><br><br><br> Caso o botão não funcione, clique nesse link: ${link}`;
-      await sendEmail(request.email, "Validação de email", textEmail);
+      const data = {
+        email: request.email,
+        subject: 'validação de e-mail.',
+        userName: `${request.nome} ${request.sobrenome}`,
+        emailLink: link,
+      };
+      const url = 'https://backend.nourishnet.net/email/confirmar-email/';
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+      await fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Erro na requisição');
+          }
+          return response.json();
+        });
       return res.status(200).json({ created: true, msg: "Request sent successfully" });
     } catch (e) {
       return res.status(400).json({
@@ -92,19 +103,28 @@ class RequestsController {
       await request.destroy();
       const school = await SchoolModel.findByPk(newUser.school_id);
       if (!school) return res.status(422).json("School doesn't exist");
-      const link = `${process.env.FRONTEND_URL}/login/`;
-      const button = `<a href='${link}' style="font-family: inherit;
-      font-weight: 500;
-      font-size: 17px;
-      padding: 0.8em 1.5em 0.8em 1.2em;
-      color: white;
-     background: #185E2C;
-      border: none;
-      box-shadow: 0 0.7em 1.5em -0.5em #000;
-      letter-spacing: 0.05em;
-      border-radius: 20em; text-decoration: none;">Faça login aqui</a>`;
-      const text = `<h2> Olá ${newUser.nome} seu pedido para fazer parte da instituição ${school.name} foi aceito com sucesso.  Faça login clicando aqui: </h2> <br> <br> ${button} `;
-      await sendEmail(req.body.email, "Registro em nossa plataforma", text);
+      const data = {
+        email: newUser.email,
+        subject: 'Registro na plataforma Nourishnet',
+        userName: `${newUser.nome} ${newUser.sobrenome}`,
+        userInstituicao: school.name,
+      };
+      const url = 'https://backend.nourishnet.net/email/pedido-aceito/';
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+      await fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Erro na requisição');
+          }
+          return response.json();
+        });
       return res.status(200).json("Created account");
     } catch (e) {
       return res.status(500).json("Internal server error");
@@ -121,8 +141,28 @@ class RequestsController {
       await request.destroy();
       const school = await SchoolModel.findByPk(request.school_id);
       if (!school) return res.status(422).json("School doesn't exist");
-      const text = `<h2> Olá, ${request.nome}. Seu pedido para fazer parte da instituição ${school.name} foi rejeitado. </h2>`;
-      await sendEmail(req.body.email, "Adesão de conta", text);
+      const data = {
+        email: request.email,
+        subject: 'Registro na plataforma Nourishnet',
+        userName: `${request.nome} ${request.sobrenome}`,
+        userInstituicao: school.name,
+      };
+      const url = 'https://backend.nourishnet.net/email/pedido-negado/';
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+      await fetch(url, options)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Erro na requisição');
+          }
+          return response.json();
+        });
       return res.status(200).json("Rejected request");
     } catch (e) {
       return res.status(500).json("Internal server error");
