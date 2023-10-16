@@ -3,15 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test:unit": "jest",
-    "test:carga:bearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2] --headers Authorization='Bearer REMOVED' http://34.95.218.151/cardapio/",
-    "test:carga:Nobearer": "npx autocannon -c 500 -d 30 --workers 10 --renderStatusCodes --latency --warmup [-c 1 -d 2]  http://34.151.204.13/tools",
     "dev": "nodemon src/server.js",
-    "build": "sucrase ./src -d ./dist --transforms imports && copyfiles -u 1  ./src/**/*.json ./dist && copyfiles -u 1 ./src/public/**/*.* ./dist && copyfiles -u 1 ./src/utils/templates/**/*.ejs ./dist"
-
-    ,
-    "start": "node dist/server.js"
+    "build": "sucrase ./src -d ./dist --transforms imports && copyfiles -u 1  ./src/**/*.json ./dist && copyfiles -u 1 ./src/public/**/*.* ./dist && copyfiles -u 1 ./src/utils/templates/**/*.ejs ./dist",
+    "start": "node dist/server.js",
+    "test": "node --test src/test/",
+    "test:watch": "node --watch --test src/test/"
   },
   "keywords": [],
   "author": "",
@@ -47,5 +46,3 @@
     "typescript": "^4.9.3"
   }
 }
-
-

@@ -1,4 +1,4 @@
-import FrequenciasHistoric from "../models/LastFrequency";
+import FrequenciasHistoric from "../models/LastFrequency.js";
 
 class LastFrequencyController {
   async index(req, res) {

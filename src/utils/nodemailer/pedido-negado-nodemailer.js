@@ -1,11 +1,17 @@
-require('dotenv').config();
-const nodemailer = require('nodemailer');
-const process = require('process');
-const fs = require('fs');
-const ejs = require('ejs');
-const path = require('path');
+import dotenv from 'dotenv';
 
-const templatePath = path.join(__dirname, '..', 'templates', 'pedido-negado.ejs');
+dotenv.config();
+import nodemailer from 'nodemailer';
+import process from 'process';
+import fs from 'fs';
+import ejs from 'ejs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const templatePath = path.join(dirname, '..', 'templates', 'pedido-negado.ejs');
 
 class NodeMailer {
   constructor(content) {
@@ -65,4 +71,4 @@ class NodeMailer {
   }
 }
 
-module.exports = NodeMailer;
+export default NodeMailer;

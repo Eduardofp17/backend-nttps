@@ -1,5 +1,5 @@
-import Cardapio from "../models/Cardapios";
-import Semanas from "../utils/weekNumber";
+import Cardapio from "../models/Cardapios.js";
+import Semanas from "../utils/weekNumber.js";
 
 class CardapioController {
   async index(req, res) {

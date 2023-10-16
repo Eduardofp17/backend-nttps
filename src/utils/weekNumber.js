@@ -17,5 +17,4 @@ class Semanas {
     return semana;
   }
 }
-
-module.exports = Semanas;
+export default Semanas;

@@ -34,5 +34,4 @@ class CNPJ {
 //   console.log(await CNPJ.consultCnpj('07.954.514/0361-54')); // expected true
 //   console.log(await CNPJ.consultCnpj('07.9af54.514/0361-54')); // expected false
 // })();
-
-module.exports = CNPJ;
+export default CNPJ;

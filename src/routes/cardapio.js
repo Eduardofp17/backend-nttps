@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import CardapioController from '../controllers/cardapio';
-import loginRequired from '../middlewares/loginRequired';
-import employeeRequired from '../middlewares/employeeRequired';
+import CardapioController from '../controllers/cardapio.js';
+import loginRequired from '../middlewares/loginRequired.js';
+import employeeRequired from '../middlewares/employeeRequired.js';
 
 const router = new Router();
 

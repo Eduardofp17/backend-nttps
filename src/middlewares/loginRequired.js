@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import SchoolModel from '../models/School';
+import User from '../models/User.js';
+import SchoolModel from '../models/School.js';
+import Lider from '../models/Lider.js';
 
 export default async (req, res, next) => {
   const { authorization } = req.headers;
@@ -38,6 +39,11 @@ export default async (req, res, next) => {
         Level: 3,
         School_id: schoolUser.id,
       };
+    }
+
+    if (user && user.level === 1) {
+      const { room_id } = await Lider.findByPk(user.id);
+      req.user.room_id = room_id;
     }
     return next();
   } catch (e) { return res.status(401).json({ errors: ['Permissão inválida'] }); }

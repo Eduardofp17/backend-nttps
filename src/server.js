@@ -1,4 +1,4 @@
-import app from "./app";
+import app from "./app.js";
 
 const processPID = process.pid;
 const port = process.env.APP_PORT;
@@ -11,3 +11,5 @@ process.on("SIGTERM", () => {
   console.log("Server ending", new Date().toISOString());
   server.close(() => process.exit());
 });
+
+export { server };

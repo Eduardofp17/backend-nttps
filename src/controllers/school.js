@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
-import SchoolModel from "../models/School";
-import codeGenerator from "../utils/code";
-import Token from "../utils/jwtEmail";
-import sendEmail from "../utils/sendEmail";
-import CNPJ from '../utils/cnpj';
-import User from '../models/User';
-import Frequencia from '../models/Frequencia';
-import Cardapios from '../models/Cardapios';
+import SchoolModel from "../models/School.js";
+import codeGenerator from "../utils/code.js";
+import Token from "../utils/jwtEmail.js";
+import sendEmail from "../utils/sendEmail.js";
+import CNPJ from '../utils/cnpj.js';
+import User from '../models/User.js';
+import Frequencia from '../models/Frequencia.js';
+import Cardapios from '../models/Cardapios.js';
 
 class SchoolController {
   async index(req, res) {

@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
-import RequestsModel from "../models/Request";
-import SchoolModel from "../models/School";
-import User from "../models/User";
-import Token from "../utils/jwtEmail";
-import sendEmail from "../utils/sendEmail";
-import AcceptUser from '../models/UserAccept';
-import NodeMailer from '../utils/nodemailer/pedido-aceito-nodemailer';
+import RequestsModel from "../models/Request.js";
+import SchoolModel from "../models/School.js";
+import User from "../models/User.js";
+import Token from "../utils/jwtEmail.js";
+import sendEmail from "../utils/sendEmail.js";
+import AcceptUser from '../models/UserAccept.js';
+import NodeMailer from '../utils/nodemailer/pedido-aceito-nodemailer.js';
 
 class RequestsController {
   async index(req, res) {

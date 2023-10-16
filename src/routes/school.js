@@ -1,6 +1,6 @@
 import { Router } from "express";
-import school from "../controllers/school";
-import loginRequired from "../middlewares/loginRequired";
+import school from "../controllers/school.js";
+import loginRequired from "../middlewares/loginRequired.js";
 
 const router = new Router();
 

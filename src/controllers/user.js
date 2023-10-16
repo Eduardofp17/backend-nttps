@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken';
-import User from "../models/User";
-import Token from "../utils/jwtEmail";
-import sendEmail from "../utils/sendEmail";
-import SchoolModel from '../models/School';
+import User from "../models/User.js";
+import Token from "../utils/jwtEmail.js";
+import sendEmail from "../utils/sendEmail.js";
+import SchoolModel from '../models/School.js';
+import Lider from '../models/Lider.js';
+import Students from '../models/student.js';
 
 class UserController {
   async index(req, res) {
@@ -63,10 +65,17 @@ class UserController {
 
       });
       if (!user) return res.status(404).json({ errors: ['User not found'] });
-
       if (user.school_id !== req.user.School_id) return res.status(401).json({ errors: ['You cannot update this user as it is not linked to your institution'] });
-      const { level } = req.body;
+      const { level, room_id } = req.body;
+      if (level === 1 && !room_id) return res.status(400).json({ error: 'Missing informations' });
       await user.update({ level });
+      if (level === 1) {
+        const fullName = `${user.nome} ${user.sobrenome}`;
+        await Lider.create({
+          id: user.id, name: fullName, email: user.email, room_id,
+        });
+        await Students.create({ name: fullName, room_id });
+      }
       return res.json({
         updated: true,
         theDoc: { user },

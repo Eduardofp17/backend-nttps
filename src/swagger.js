@@ -1,4 +1,4 @@
-{
+export const swaggerJson = {
   "openapi": "3.0.0",
   "info": {
     "title": "API NOURISHNET",

@@ -1,24 +1,33 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 
-import './database';
-// Routes
+dotenv.config();
+
+import './database/index.js';
 import cors from 'cors';
 import compression from 'compression';
 import helmet from 'helmet';
-import homeRoutes from './routes/home';
-import cardapioRoutes from './routes/cardapio';
-import userRoutes from './routes/user';
-import tokenRoutes from './routes/tokenRoutes';
-import frequenciaRoutes from './routes/frequencia';
-import schoolRoutes from './routes/school';
-import requestsRoutes from './routes/request';
-import emailRoutes from './routes/email';
+import path, { dirname } from 'path';
+import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import { fileURLToPath } from 'url';
+// Routes
+import homeRoutes from './routes/home.js';
+import cardapioRoutes from './routes/cardapio.js';
+import userRoutes from './routes/user.js';
+import tokenRoutes from './routes/tokenRoutes.js';
+import frequenciaRoutes from './routes/frequencia.js';
+import schoolRoutes from './routes/school.js';
+import requestsRoutes from './routes/request.js';
+import emailRoutes from './routes/email.js';
+import roomRoutes from './routes/room.js';
+import studentRoutes from './routes/students.js';
 
-const path = require('path');
+// eslint-disable-next-line no-underscore-dangle
+const __filename = fileURLToPath(import.meta.url);
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = dirname(__filename);
 
-const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocs = require('./swagger.json');
+import { swaggerJson as swaggerDocs } from './swagger.js';
 
 const whitelist = ["http://localhost:5173", "https://nourishnet.net", "http://localhost:3090"];
 
@@ -59,6 +68,8 @@ class App {
     this.app.use("/requests/", requestsRoutes);
     this.app.use("/email/", emailRoutes);
     this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+    this.app.use("/room/", roomRoutes);
+    this.app.use("/student/", studentRoutes);
   }
 }
 
