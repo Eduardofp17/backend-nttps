@@ -8,7 +8,7 @@
     "test:unit": "jest",
     "dev": "nodemon src/server.js",
     "build": "sucrase ./src -d ./dist --transforms imports && copyfiles -u 1  ./src/**/*.json ./dist && copyfiles -u 1 ./src/public/**/*.* ./dist && copyfiles -u 1 ./src/utils/templates/**/*.ejs ./dist",
-    "start": "node dist/server.js",
+    "start": "node src/server.js",
     "test": "node --test src/test/",
     "test:watch": "node --watch --test src/test/"
   },
