@@ -29,7 +29,7 @@ const __dirname = dirname(__filename);
 
 import { swaggerJson as swaggerDocs } from './swagger.js';
 
-const whitelist = ["http://localhost:5173", "https://nourishnet.net", "http://localhost:3090"];
+const whitelist = ["http://localhost:5173", "https://nourishnet.net", "http://localhost:3090", "https://backend.nourishnet.net"];
 
 const corsOptions = {
   origin(origin, callback) {
