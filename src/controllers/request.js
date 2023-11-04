@@ -24,7 +24,7 @@ class RequestsController {
       if (!req.body.code) return res.status(400).json({ created: false, msg: "Please fill the field with an code" });
 
       const school = await SchoolModel.findOne({ where: { code: req.body.code } });
-      if (!school) return res.status(400).json({ created: false, msg: "School don't exist" });
+      if (!school) return res.status(400).json({ created: false, msg: "Invalid code" });
 
       if (req.body.email === school.email) return res.status(400).json({ created: false, msg: "Invalid email or password" });
       if (school.accepting_accounts < 1) return res.status(422).json({ created: false, msg: "School is not accepting new accounts" });
@@ -32,7 +32,7 @@ class RequestsController {
       if (hasRequest) return res.status(400).json({ craeted: false, msg: "Request already exist" });
 
       const userExist = await User.findOne({ where: { email: req.body.email } });
-      if (userExist) return res.status(400).json({ created: false, msg: "User already exist" });
+      if (userExist) return res.status(400).json({ created: false, msg: "Invalid email or password" });
       req.body.school_id = school.id;
       req.body.status = "Pending";
       const request = await RequestsModel.create(req.body);

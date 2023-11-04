@@ -56,6 +56,33 @@ export default class RequestsModel extends Model {
           },
         },
       },
+      birthday: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please enter your birthday",
+          },
+        },
+      },
+      agree_with_terms_and_privacy_policy: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You must agree to the terms and privacy policy",
+          },
+        },
+      },
+      is_male: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please select the gender",
+          },
+        },
+      },
       password_hash: {
         type: Sequelize.STRING,
         defaultValue: '',

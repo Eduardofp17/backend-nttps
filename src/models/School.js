@@ -64,6 +64,123 @@ export default class SchoolModel extends Model {
         allowNull: true,
         defaultValue: 0,
       },
+      agree_with_terms_and_privacy_policy: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          isBoolean: {
+            msg: "The 'agree_with_terms_and_privacy_policy' field must be a boolean value.",
+          },
+        },
+      },
+
+      is_public: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          isBoolean: {
+            msg: "The 'is_public' field must be a boolean value.",
+          },
+        },
+      },
+
+      school_modality: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the school modality.",
+          },
+          len: {
+            args: [1, 255],
+            msg: "The school modality must have between 1 and 255 characters.",
+          },
+        },
+      },
+
+      forms_of_education: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the types of education.",
+          },
+          len: {
+            args: [1, 255],
+            msg: "The types of education must have between 1 and 255 characters.",
+          },
+        },
+      },
+
+      cep: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the ZIP code (CEP).",
+          },
+          len: {
+            args: [9, 9],
+            msg: "The ZIP code (CEP) must contain 9 digits.",
+          },
+        },
+      },
+
+      state: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the state.",
+          },
+          len: {
+            args: [1, 255],
+            msg: "The state must have between 1 and 255 characters.",
+          },
+        },
+      },
+
+      city: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the city.",
+          },
+          len: {
+            args: [1, 255],
+            msg: "The city must have between 1 and 255 characters.",
+          },
+        },
+      },
+
+      address: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the address.",
+          },
+          len: {
+            args: [1, 255],
+            msg: "The address must have between 1 and 255 characters.",
+          },
+        },
+      },
+
+      neighborhood: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You need to input the neighborhood.",
+          },
+          len: {
+            args: [1, 255],
+            msg: "The neighborhood must have between 1 and 255 characters.",
+          },
+        },
+      },
       password_hash: {
         type: Sequelize.STRING,
         defaultValue: '',
@@ -78,6 +195,7 @@ export default class SchoolModel extends Model {
           },
         },
       },
+
     }, { sequelize, tableName: 'Schools' });
     this.addHook('beforeSave', async (user) => {
       if (user.password) {
