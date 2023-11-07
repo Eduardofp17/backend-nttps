@@ -98,6 +98,10 @@ class RequestsController {
         email: request.email,
         password_hash: request.password_hash,
         school_id: request.school_id,
+        birthday: request.birthday,
+        agree_with_terms_and_privacy_policy: request.agree_with_terms_and_privacy_policy,
+        is_male: request.is_male,
+
       });
       if (!newUser) return res.status(500).json("An error ocurred");
       await request.destroy();
@@ -127,7 +131,10 @@ class RequestsController {
         });
       return res.status(200).json("Created account");
     } catch (e) {
-      return res.status(500).json("Internal server error");
+      console.log(e);
+      return res.status(400).json({
+        errors: e.errors.map((err) => err.message),
+      });
     }
   }
 

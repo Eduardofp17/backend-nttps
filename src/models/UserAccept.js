@@ -10,7 +10,10 @@ export default class User extends Model {
         validate: {
           len: {
             args: [3, 33],
-            msg: "Seu nome deve ter entre 3 e 33 caracteres",
+            msg: "Your name must be between 3 and 33 characters",
+          },
+          notEmpty: {
+            msg: "Please fill in the name field",
           },
         },
       },
@@ -20,7 +23,10 @@ export default class User extends Model {
         validate: {
           len: {
             args: [3, 100],
-            msg: "Seu sobrenome deve ter entre 3 e 100 caracteres",
+            msg: "Your last name must be between 3 and 100 characters",
+          },
+          notEmpty: {
+            msg: "Please fill in the last name field",
           },
         },
       },
@@ -28,11 +34,14 @@ export default class User extends Model {
         type: Sequelize.STRING,
         defaultValue: '',
         unique: {
-          msg: 'Email já existe',
+          msg: 'This email is already in use',
         },
         validate: {
           isEmail: {
-            msg: "Você deve mandar um email válido",
+            msg: "Please enter a valid email",
+          },
+          notEmpty: {
+            msg: "Please fill in the email field",
           },
         },
       },
@@ -43,10 +52,36 @@ export default class User extends Model {
       school_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: '',
         validate: {
           notEmpty: {
             msg: "A user must be associated with a school",
+          },
+        },
+      },
+      birthday: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please enter your birthday",
+          },
+        },
+      },
+      agree_with_terms_and_privacy_policy: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "You must agree to the terms and privacy policy",
+          },
+        },
+      },
+      is_male: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Please select the gender",
           },
         },
       },
